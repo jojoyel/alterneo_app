@@ -1,7 +1,9 @@
 package com.alterneo.alterneo_app.responses
 
+import com.alterneo.alterneo_app.models.Company
+
 class CompanyResponse(
-    var id: String,
+    var id: Number,
     var name: String,
     var description: String,
     var image: String,
@@ -15,6 +17,11 @@ class CompanyResponse(
     var company_create_date: String,
     var company_id_code: String,
     var registration_date: String,
-    var latitude: String,
-    var longitude: String
-)
+    var latitude: Float,
+    var longitude: Float
+) : BasicResponse(id) {
+
+    fun toCompany(): Company {
+        return Company(this)
+    }
+}

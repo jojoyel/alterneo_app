@@ -1,5 +1,6 @@
 package com.alterneo.alterneo_app.utils;
 
+import com.alterneo.alterneo_app.responses.CompaniesResponse;
 import com.alterneo.alterneo_app.responses.CompanyResponse;
 
 import retrofit2.Call;
@@ -10,4 +11,7 @@ public interface API {
 
 	@GET("company")
 	Call<CompanyResponse> getCompany(@Query("id") int id);
+
+	@GET("allCompanies")
+	Call<CompaniesResponse> getCompanies(@Query("page") int page);
 }

@@ -40,6 +40,8 @@ public abstract class FragmentStructure<T extends ViewBinding> extends Fragment 
 		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 			throw new NullPointerException("Bruh");
 		}
+
+		viewCreated();
 		return binding.getRoot();
 	}
 
