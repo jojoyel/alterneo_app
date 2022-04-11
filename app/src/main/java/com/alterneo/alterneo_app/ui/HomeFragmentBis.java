@@ -1,5 +1,7 @@
 package com.alterneo.alterneo_app.ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.alterneo.alterneo_app.R;
@@ -8,19 +10,24 @@ import com.alterneo.alterneo_app.models.Company;
 import com.alterneo.alterneo_app.responses.CompaniesResponse;
 import com.alterneo.alterneo_app.responses.CompanyResponse;
 import com.alterneo.alterneo_app.utils.Client;
+import com.mapbox.geojson.Point;
+import com.mapbox.maps.CameraOptions;
 import com.mapbox.maps.MapView;
+import com.mapbox.maps.MapboxMap;
 import com.mapbox.maps.Style;
-import com.mapbox.maps.ViewAnnotationOptions;
-import com.mapbox.maps.viewannotation.ViewAnnotation;
-import com.mapbox.maps.viewannotation.ViewAnnotationManager;
+import com.mapbox.maps.plugin.Plugin;
+import com.mapbox.maps.plugin.annotation.AnnotationPlugin;
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager;
+
+import java.lang.annotation.Annotation;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeFragment extends FragmentStructure<FragmentHomeBinding> {
+public class HomeFragmentBis extends FragmentStructure<FragmentHomeBinding> {
 
-	public static final String TAG = "HomeFragment";
+	public static final String TAG = "HomeFragmentBis";
 
 	@Override
 	protected Class<FragmentHomeBinding> getClassBinding() {
@@ -34,13 +41,11 @@ public class HomeFragment extends FragmentStructure<FragmentHomeBinding> {
 
 		mapView = binding.mapView;
 		mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
-
 		Call<CompanyResponse> call = Client.getClient(mainActivity).getApi().getCompany(1);
 		call.enqueue(new Callback<CompanyResponse>() {
 			@Override
 			public void onResponse(Call<CompanyResponse> call, Response<CompanyResponse> response) {
 				Log.d(TAG, "onResponse: " + response.body().getName());
-				addPinToMap(response.body().toCompany());
 			}
 
 			@Override
@@ -61,8 +66,7 @@ public class HomeFragment extends FragmentStructure<FragmentHomeBinding> {
 				Log.d(TAG, "onFailure: " + t.getMessage());
 			}
 		});
+
 	}
 
-	private void addPinToMap(Company company) {
-	}
 }

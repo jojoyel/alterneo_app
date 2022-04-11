@@ -2,11 +2,11 @@ package com.alterneo.alterneo_app;
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.alterneo.alterneo_app.ui.HomeFragment;
+import com.alterneo.alterneo_app.ui.HomeFragmentBis;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		this.setFragment(new HomeFragment());
+		this.setFragment(new HomeFragmentBis());
 
 	}
 
