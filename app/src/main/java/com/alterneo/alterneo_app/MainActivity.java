@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 			.replace(R.id.flMain, fragment).commitAllowingStateLoss();
 	}
 
-	public void setFragment(Fragment fragment, @Nullable Bundle args) {
+	public void setFragment(Fragment fragment, Bundle args) {
 		getSupportFragmentManager().beginTransaction()
 			.replace(R.id.flMain, fragment.getClass(), args).commitAllowingStateLoss();
 	}

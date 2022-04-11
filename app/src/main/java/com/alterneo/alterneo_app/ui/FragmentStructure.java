@@ -21,7 +21,6 @@ public abstract class FragmentStructure<T extends ViewBinding> extends Fragment 
 	protected MainActivity mainActivity;
 	protected T binding;
 
-
 	@Override
 	public void onAttach(@NonNull Context context) {
 		super.onAttach(context);
