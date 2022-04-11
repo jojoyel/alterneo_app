@@ -17,8 +17,8 @@ class CompanyResponse(
     var company_create_date: String,
     var company_id_code: String,
     var registration_date: String,
-    var latitude: Float,
-    var longitude: Float
+    var latitude: Double,
+    var longitude: Double
 ) : BasicResponse(id) {
 
     fun toCompany(): Company {

@@ -16,10 +16,12 @@
 			android:layout_height="0dp"
 			mapbox:layout_constraintBottom_toBottomOf="parent"
 			mapbox:layout_constraintEnd_toEndOf="parent"
+			mapbox:layout_constraintHorizontal_bias="0.0"
 			mapbox:layout_constraintStart_toStartOf="parent"
 			mapbox:layout_constraintTop_toTopOf="parent"
-			mapbox:mapbox_cameraTargetLat="59.31"
-			mapbox:mapbox_cameraTargetLng="18.06"
-			mapbox:mapbox_cameraZoom="9.0" />
+			mapbox:layout_constraintVertical_bias="0.0"
+			mapbox:mapbox_cameraTargetLat="49.26335094209739"
+			mapbox:mapbox_cameraTargetLng="4.035162350762649"
+			mapbox:mapbox_cameraZoom="6.0" />
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
