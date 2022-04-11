@@ -2,10 +2,11 @@ package com.alterneo.alterneo_app;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
-import com.mapbox.maps.MapView;
-import com.mapbox.maps.Style;
+import com.alterneo.alterneo_app.ui.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,7 +15,17 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		MapView mapView = findViewById(R.id.mapView);
-		mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
+		this.setFragment(new HomeFragment());
+
+	}
+
+	public void setFragment(Fragment fragment) {
+		getSupportFragmentManager().beginTransaction()
+			.replace(R.id.flMain, fragment).commitAllowingStateLoss();
+	}
+
+	public void setFragment(Fragment fragment, @Nullable Bundle args) {
+		getSupportFragmentManager().beginTransaction()
+			.replace(R.id.flMain, fragment.getClass(), args).commitAllowingStateLoss();
 	}
 }
