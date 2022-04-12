@@ -1,6 +1,9 @@
 <resources>
 	<string name="app_name">Alterneo app</string>
 
-
 	<string name="mapbox_access_token">pk.eyJ1Ijoiam9qb3llbCIsImEiOiJjbDF1YzlvNXAwNzJ1M25qc2ZvYWZmbWtzIn0.VRoDx5Z9bzjckD3csgQv6A</string>
+
+	<string name="no_offer">No job offer</string>
+
+	<string name="cont_desc_company_image">Company Image</string>
 </resources>

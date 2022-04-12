@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<variable
+			name="company"
+			type="com.alterneo.alterneo_app.models.Company" />
+	</data>
+
+	<LinearLayout
+		android:id="@+id/llBottomSheet"
+		style="@style/Widget.MaterialComponents.BottomSheet"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		app:behavior_hideable="false"
+		app:behavior_peekHeight="40dp"
+		app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+		<LinearLayout
+			android:id="@+id/llBottomSheetTop"
+			android:layout_width="match_parent"
+			android:layout_height="20dp"
+			android:backgroundTint="?attr/colorSecondary"
+			android:gravity="center"
+			android:orientation="vertical">
+
+			<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/dash"
+				android:tint="@color/purple_700" />
+		</LinearLayout>
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="12dp">
+
+			<ImageView
+				android:id="@+id/ivCompany"
+				android:layout_width="120dp"
+				android:layout_height="120dp"
+				android:contentDescription="@string/cont_desc_company_image"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+
+			<LinearLayout
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:layout_marginStart="12dp"
+				android:orientation="vertical"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toEndOf="@+id/ivCompany"
+				app:layout_constraintTop_toTopOf="parent">
+
+				<TextView
+					android:id="@+id/tvCompany"
+					android:textSize="18sp"
+					style="@style/ImportantText"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@{company.name}"
+					tools:text="Entreprise texte" />
+
+				<TextView
+					android:id="@+id/tvAddress"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:drawableLeft="@drawable/location_city"
+					android:gravity="center_vertical"
+					tools:text="46 rue de la Justice, 51100 Reims" />
+
+				<TextView
+					android:id="@+id/tvEmployeesNumber"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:drawableLeft="@drawable/group"
+					android:gravity="center_vertical"
+					android:text="@{company.employee_number}"
+					tools:text="512" />
+			</LinearLayout>
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</LinearLayout>
+</layout>

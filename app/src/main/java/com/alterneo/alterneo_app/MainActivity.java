@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.alterneo.alterneo_app.ui.HomeFragment;
+import com.alterneo.alterneo_app.ui.home.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
 

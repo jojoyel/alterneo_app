@@ -1,6 +1,5 @@
-package com.alterneo.alterneo_app.ui
+package com.alterneo.alterneo_app.ui.home
 
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -8,8 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.support.annotation.DrawableRes
 import android.util.Log
-import android.view.View
-import android.view.animation.AnimationUtils
+import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
 import com.alterneo.alterneo_app.R
 import com.alterneo.alterneo_app.databinding.FragmentHomeBinding
@@ -17,16 +15,21 @@ import com.alterneo.alterneo_app.models.Company
 import com.alterneo.alterneo_app.models.Proposal
 import com.alterneo.alterneo_app.responses.CompaniesResponse
 import com.alterneo.alterneo_app.responses.ProposalsResponse
+import com.alterneo.alterneo_app.ui.FragmentStructure
 import com.alterneo.alterneo_app.utils.Client
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.animation.MapAnimationOptions
+import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
+import com.mapbox.maps.plugin.scalebar.scalebar
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Response
@@ -36,41 +39,40 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
         return FragmentHomeBinding::class.java
     }
 
+    private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
+
     private var mapView: MapView? = null
 
     override fun viewCreated() {
+
+        bottomSheet = BottomSheetBehavior.from(binding.includeBottomSheet.llBottomSheet)
         mapView = binding.mapView
         mapView?.getMapboxMap()?.loadStyleUri(
-            Style.MAPBOX_STREETS,
-            object : Style.OnStyleLoaded {
-                override fun onStyleLoaded(style: Style) {
-                }
-            }
-        )
+            Style.MAPBOX_STREETS
+        ) {
+            mapView!!.scalebar.enabled = false
+            Client.getClient(mainActivity).api.getCompanies(0)
+                .enqueue(object : retrofit2.Callback<CompaniesResponse> {
+                    override fun onResponse(
+                        call: Call<CompaniesResponse>,
+                        r: Response<CompaniesResponse>
+                    ) {
+                        r.body()?.data?.forEach {
+                            makeProposalsCall(it.toCompany())
+                        }
+                    }
 
-       mapView?.getMapboxMap()?.addOnMapClickListener(onMapClickListener = {
-            if (binding.cvCompany.visibility == View.VISIBLE) {
-                val animator = ObjectAnimator.ofFloat(binding.cvCompany, View.TRANSLATION_Y, binding.cvCompany.height.toFloat() + 50)
-                animator.start()
-            }
+                    override fun onFailure(call: Call<CompaniesResponse>, t: Throwable) {
+                        Log.d("LOGMOICA", "onFailure: " + t.message)
+                    }
+                })
+        }
 
+        mapView?.getMapboxMap()?.addOnMapClickListener(onMapClickListener = {
+            if (bottomSheet.state == BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
             false
-        })
-
-        val call = Client.getClient(mainActivity).api.getCompanies(0)
-        call.enqueue(object : retrofit2.Callback<CompaniesResponse> {
-            override fun onResponse(
-                call: Call<CompaniesResponse>,
-                r: Response<CompaniesResponse>
-            ) {
-                r.body()?.data?.forEach {
-                    makeProposalsCall(it.toCompany())
-                }
-            }
-
-            override fun onFailure(call: Call<CompaniesResponse>, t: Throwable) {
-                Log.d("LOGMOICA", "onFailure: " + t.message)
-            }
         })
     }
 
@@ -115,16 +117,16 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
     }
 
     private fun clickedOnPin(c: Company) {
+        Picasso.get().load(c.image).into(binding.includeBottomSheet.ivCompany)
         val camera: CameraOptions = CameraOptions.Builder()
             .center(Point.fromLngLat(c.longitude!!, c.latitude!!))
             .zoom(12.0)
+            .pitch(0.0)
             .build()
-        mapView?.getMapboxMap()?.setCamera(camera)
-        binding.company = c
-        Picasso.get().load(c.image).into(binding.ivCompany)
-        binding.ivCompany
-        val animator = ObjectAnimator.ofFloat(binding.cvCompany, View.TRANSLATION_Y, 200f)
-        animator.start()
+        mapView?.getMapboxMap()
+            ?.flyTo(camera, MapAnimationOptions.mapAnimationOptions { duration(1000) })
+        binding.includeBottomSheet.company = c
+        bottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun bitmapFromDrawableRes(context: Context, @DrawableRes resourceId: Int) =
