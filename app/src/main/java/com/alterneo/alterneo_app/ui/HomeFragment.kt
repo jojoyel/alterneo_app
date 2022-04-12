@@ -1,5 +1,6 @@
 package com.alterneo.alterneo_app.ui
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -7,20 +8,26 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.support.annotation.DrawableRes
 import android.util.Log
+import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.appcompat.content.res.AppCompatResources
 import com.alterneo.alterneo_app.R
 import com.alterneo.alterneo_app.databinding.FragmentHomeBinding
 import com.alterneo.alterneo_app.models.Company
+import com.alterneo.alterneo_app.models.Proposal
 import com.alterneo.alterneo_app.responses.CompaniesResponse
+import com.alterneo.alterneo_app.responses.ProposalsResponse
 import com.alterneo.alterneo_app.utils.Client
 import com.mapbox.geojson.Point
+import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.gestures.addOnMapClickListener
+import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Response
 
@@ -41,6 +48,15 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
             }
         )
 
+       mapView?.getMapboxMap()?.addOnMapClickListener(onMapClickListener = {
+            if (binding.cvCompany.visibility == View.VISIBLE) {
+                val animator = ObjectAnimator.ofFloat(binding.cvCompany, View.TRANSLATION_Y, binding.cvCompany.height.toFloat() + 50)
+                animator.start()
+            }
+
+            false
+        })
+
         val call = Client.getClient(mainActivity).api.getCompanies(0)
         call.enqueue(object : retrofit2.Callback<CompaniesResponse> {
             override fun onResponse(
@@ -48,7 +64,7 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
                 r: Response<CompaniesResponse>
             ) {
                 r.body()?.data?.forEach {
-                    addAnnotationToMap(it.toCompany())
+                    makeProposalsCall(it.toCompany())
                 }
             }
 
@@ -58,19 +74,33 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
         })
     }
 
-    private fun addAnnotationToMap(c: Company) {
-    // Create an instance of the Annotation API and get the PointAnnotationManager.
+    private fun makeProposalsCall(c: Company) {
+        Client.getClient(mainActivity).api.getProposals(c.id)
+            .enqueue(object : retrofit2.Callback<ProposalsResponse> {
+                override fun onResponse(
+                    call: Call<ProposalsResponse>,
+                    response: Response<ProposalsResponse>
+                ) {
+                    addAnnotationToMap(c, response.body()!!.toProposals())
+                }
+
+                override fun onFailure(call: Call<ProposalsResponse>, t: Throwable) {
+                }
+            })
+    }
+
+    private fun addAnnotationToMap(c: Company, p: List<Proposal>) {
+        // Create an instance of the Annotation API and get the PointAnnotationManager.
+        val pin: Int = if (p.isNotEmpty()) R.drawable.pin_green else R.drawable.pin_red
         bitmapFromDrawableRes(
             mainActivity,
-            R.drawable.pin_green
+            pin
         )?.let {
             val annotationApi = mapView?.annotations
             val pointAnnotationManager = annotationApi?.createPointAnnotationManager(mapView!!)
-            pointAnnotationManager?.addClickListener(object : OnPointAnnotationClickListener {
-                override fun onAnnotationClick(annotation: PointAnnotation): Boolean {
-                    clickedOnPin(c)
-                    return true
-                }
+            pointAnnotationManager?.addClickListener(OnPointAnnotationClickListener {
+                clickedOnPin(c)
+                true
             })
             // Set options for the resulting symbol layer.
             val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
@@ -85,7 +115,16 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
     }
 
     private fun clickedOnPin(c: Company) {
-        Log.d("LOGMOICA", "clickedOnPin: " + c.city)
+        val camera: CameraOptions = CameraOptions.Builder()
+            .center(Point.fromLngLat(c.longitude!!, c.latitude!!))
+            .zoom(12.0)
+            .build()
+        mapView?.getMapboxMap()?.setCamera(camera)
+        binding.company = c
+        Picasso.get().load(c.image).into(binding.ivCompany)
+        binding.ivCompany
+        val animator = ObjectAnimator.ofFloat(binding.cvCompany, View.TRANSLATION_Y, 200f)
+        animator.start()
     }
 
     private fun bitmapFromDrawableRes(context: Context, @DrawableRes resourceId: Int) =

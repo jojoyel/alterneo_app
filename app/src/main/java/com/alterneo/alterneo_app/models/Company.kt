@@ -1,10 +1,9 @@
 package com.alterneo.alterneo_app.models
 
-import com.alterneo.alterneo_app.responses.BasicResponse
 import com.alterneo.alterneo_app.responses.CompanyResponse
 
 class Company(
-    var id: Number?,
+    var id: Int,
     var name: String?,
     var description: String?,
     var image: String?,
@@ -20,7 +19,7 @@ class Company(
     var registration_date: String?,
     var latitude: Double?,
     var longitude: Double?
-): BasicResponse(id!!) {
+) {
     constructor(r: CompanyResponse) : this(
         r.id,
         r.name,

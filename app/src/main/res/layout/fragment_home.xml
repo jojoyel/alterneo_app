@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:mapbox="http://schemas.android.com/apk/res-auto">
+	xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
 
 	<data>
 
+		<variable
+			name="company"
+			type="com.alterneo.alterneo_app.models.Company" />
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -23,5 +27,59 @@
 			mapbox:mapbox_cameraTargetLat="49.26335094209739"
 			mapbox:mapbox_cameraTargetLng="4.035162350762649"
 			mapbox:mapbox_cameraZoom="6.0" />
+
+		<com.google.android.material.card.MaterialCardView
+			android:id="@+id/cvCompany"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_margin="16dp"
+			mapbox:layout_constraintBottom_toBottomOf="parent"
+			mapbox:layout_constraintEnd_toEndOf="parent"
+			mapbox:layout_constraintStart_toStartOf="parent">
+
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<ImageView
+					android:id="@+id/ivCompany"
+					android:layout_width="120dp"
+					android:layout_height="120dp"
+					mapbox:layout_constraintBottom_toBottomOf="parent"
+					mapbox:layout_constraintStart_toStartOf="parent"
+					mapbox:layout_constraintTop_toTopOf="parent" />
+
+				<LinearLayout
+					android:layout_width="0dp"
+					android:layout_height="0dp"
+					android:orientation="vertical"
+					mapbox:layout_constraintBottom_toBottomOf="parent"
+					mapbox:layout_constraintEnd_toEndOf="parent"
+					mapbox:layout_constraintStart_toEndOf="@+id/ivCompany"
+					mapbox:layout_constraintTop_toTopOf="parent">
+
+					<TextView
+						android:id="@+id/tvCOmpany"
+						style="@style/ImportantText"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@{company.name}"
+						tools:text="Entreprise texte" />
+
+					<TextView
+						android:id="@+id/tvAddress"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						tools:text="46 rue de la Justice, 51100 Reims" />
+
+					<TextView
+						android:id="@+id/tvEmployeesNumber"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@{company.employee_number}"
+						tools:text="512" />
+				</LinearLayout>
+			</androidx.constraintlayout.widget.ConstraintLayout>
+		</com.google.android.material.card.MaterialCardView>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,7 +3,7 @@ package com.alterneo.alterneo_app.responses
 import com.alterneo.alterneo_app.models.Company
 
 class CompanyResponse(
-    var id: Number,
+    var id: Int,
     var name: String,
     var description: String,
     var image: String,
