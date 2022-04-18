@@ -63,7 +63,6 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
                     }
 
                     override fun onFailure(call: Call<CompaniesResponse>, t: Throwable) {
-                        Log.d("LOGMOICA", "onFailure: " + t.message)
                     }
                 })
         }
