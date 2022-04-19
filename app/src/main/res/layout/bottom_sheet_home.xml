@@ -6,6 +6,10 @@
 	<data>
 
 		<variable
+			name="handler"
+			type="com.alterneo.alterneo_app.ui.ClickHandler" />
+
+		<variable
 			name="company"
 			type="com.alterneo.alterneo_app.models.Company" />
 	</data>
@@ -26,13 +30,14 @@
 			android:layout_height="20dp"
 			android:backgroundTint="?attr/colorSecondary"
 			android:gravity="center"
+			android:onClick="@{handler::onClick}"
 			android:orientation="vertical">
 
 			<ImageView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:src="@drawable/dash"
-				android:tint="@color/purple_700" />
+				android:src="@drawable/ic_dash"
+				app:tint="?attr/colorSecondary" />
 		</LinearLayout>
 
 		<androidx.constraintlayout.widget.ConstraintLayout
@@ -45,13 +50,12 @@
 				android:layout_width="120dp"
 				android:layout_height="120dp"
 				android:contentDescription="@string/cont_desc_company_image"
-				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintTop_toTopOf="parent" />
 
 			<LinearLayout
 				android:layout_width="0dp"
-				android:layout_height="0dp"
+				android:layout_height="wrap_content"
 				android:layout_marginStart="12dp"
 				android:orientation="vertical"
 				app:layout_constraintBottom_toBottomOf="parent"
@@ -61,29 +65,43 @@
 
 				<TextView
 					android:id="@+id/tvCompany"
-					android:textSize="18sp"
 					style="@style/ImportantText"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@{company.name}"
+					android:textSize="18sp"
 					tools:text="Entreprise texte" />
 
 				<TextView
 					android:id="@+id/tvAddress"
-					android:layout_width="wrap_content"
+					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:drawableLeft="@drawable/location_city"
+					android:drawablePadding="8dp"
+					android:ellipsize="end"
 					android:gravity="center_vertical"
+					android:maxLines="2"
+					android:text="@{@string/address_format(company.address, company.postal_code, company.city)}"
+					app:drawableLeftCompat="@drawable/ic_location_city"
 					tools:text="46 rue de la Justice, 51100 Reims" />
 
 				<TextView
 					android:id="@+id/tvEmployeesNumber"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:drawableLeft="@drawable/group"
+					android:drawablePadding="8dp"
 					android:gravity="center_vertical"
 					android:text="@{company.employee_number}"
+					app:drawableLeftCompat="@drawable/ic_group"
 					tools:text="512" />
+
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/btn_proposals"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="end"
+					android:onClick="@{handler::onClick}"
+					android:text="offres"
+					app:drawableLeftCompat="@drawable/ic_work" />
 			</LinearLayout>
 		</androidx.constraintlayout.widget.ConstraintLayout>
 	</LinearLayout>

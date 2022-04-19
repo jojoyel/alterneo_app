@@ -9,6 +9,7 @@ import android.support.annotation.DrawableRes
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
 import com.alterneo.alterneo_app.R
@@ -17,6 +18,7 @@ import com.alterneo.alterneo_app.models.Company
 import com.alterneo.alterneo_app.models.Proposal
 import com.alterneo.alterneo_app.responses.CompaniesResponse
 import com.alterneo.alterneo_app.responses.ProposalsResponse
+import com.alterneo.alterneo_app.ui.ClickHandler
 import com.alterneo.alterneo_app.ui.FragmentStructure
 import com.alterneo.alterneo_app.utils.Client
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -36,7 +38,7 @@ import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Response
 
-class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
+class HomeFragment : FragmentStructure<FragmentHomeBinding>(), ClickHandler {
     override fun getClassBinding(): Class<FragmentHomeBinding> {
         return FragmentHomeBinding::class.java
     }
@@ -47,6 +49,9 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
 
     override fun viewCreated() {
         setHasOptionsMenu(true)
+
+        binding.includeBottomSheet.handler = this
+
         bottomSheet = BottomSheetBehavior.from(binding.includeBottomSheet.llBottomSheet)
         mapView = binding.mapView
         mapView?.getMapboxMap()?.loadStyleUri(
@@ -80,6 +85,7 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
     }
 
     private fun loadEverything() {
+        mapView?.annotations?.cleanup()
         Client.getClient(mainActivity).api.getCompanies(0)
             .enqueue(object : retrofit2.Callback<CompaniesResponse> {
                 override fun onResponse(
@@ -113,7 +119,7 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
 
     private fun addAnnotationToMap(c: Company, p: List<Proposal>) {
         // Create an instance of the Annotation API and get the PointAnnotationManager.
-        val pin: Int = if (p.isNotEmpty()) R.drawable.pin_green else R.drawable.pin_red
+        val pin: Int = if (p.isNotEmpty()) R.drawable.ic_pin_green else R.drawable.ic_pin_red
         bitmapFromDrawableRes(
             mainActivity,
             pin
@@ -121,7 +127,7 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
             val annotationApi = mapView?.annotations
             val pointAnnotationManager = annotationApi?.createPointAnnotationManager(mapView!!)
             pointAnnotationManager?.addClickListener(OnPointAnnotationClickListener {
-                clickedOnPin(c)
+                clickedOnPin(c, p.isEmpty())
                 true
             })
             // Set options for the resulting symbol layer.
@@ -136,7 +142,7 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
         }
     }
 
-    private fun clickedOnPin(c: Company) {
+    private fun clickedOnPin(c: Company, empty: Boolean) {
         Picasso.get().load(c.image).into(binding.includeBottomSheet.ivCompany)
         val camera: CameraOptions = CameraOptions.Builder()
             .center(Point.fromLngLat(c.longitude!!, c.latitude!!))
@@ -147,6 +153,7 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
             ?.flyTo(camera, MapAnimationOptions.mapAnimationOptions { duration(1000) })
         binding.includeBottomSheet.company = c
         bottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+        binding.includeBottomSheet.btnProposals.isEnabled = !empty
     }
 
     private fun bitmapFromDrawableRes(context: Context, @DrawableRes resourceId: Int) =
@@ -170,6 +177,15 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
             drawable.setBounds(0, 0, canvas.width, canvas.height)
             drawable.draw(canvas)
             bitmap
+        }
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.llBottomSheetTop -> {
+                bottomSheet.state =
+                    if (bottomSheet.state == BottomSheetBehavior.STATE_EXPANDED) BottomSheetBehavior.STATE_COLLAPSED else BottomSheetBehavior.STATE_EXPANDED
+            }
         }
     }
 }
