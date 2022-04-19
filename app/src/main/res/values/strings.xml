@@ -6,4 +6,6 @@
 	<string name="no_offer">No job offer</string>
 
 	<string name="cont_desc_company_image">Company Image</string>
+
+	<string name="address_format">%s, %s %s</string>
 </resources>
