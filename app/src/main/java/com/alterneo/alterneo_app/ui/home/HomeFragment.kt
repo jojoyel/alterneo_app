@@ -6,7 +6,9 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.support.annotation.DrawableRes
-import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
 import com.alterneo.alterneo_app.R
@@ -44,27 +46,14 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
     private var mapView: MapView? = null
 
     override fun viewCreated() {
-
+        setHasOptionsMenu(true)
         bottomSheet = BottomSheetBehavior.from(binding.includeBottomSheet.llBottomSheet)
         mapView = binding.mapView
         mapView?.getMapboxMap()?.loadStyleUri(
             Style.MAPBOX_STREETS
         ) {
             mapView!!.scalebar.enabled = false
-            Client.getClient(mainActivity).api.getCompanies(0)
-                .enqueue(object : retrofit2.Callback<CompaniesResponse> {
-                    override fun onResponse(
-                        call: Call<CompaniesResponse>,
-                        r: Response<CompaniesResponse>
-                    ) {
-                        r.body()?.data?.forEach {
-                            makeProposalsCall(it.toCompany())
-                        }
-                    }
-
-                    override fun onFailure(call: Call<CompaniesResponse>, t: Throwable) {
-                    }
-                })
+            loadEverything()
         }
 
         mapView?.getMapboxMap()?.addOnMapClickListener(onMapClickListener = {
@@ -73,6 +62,38 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>() {
             }
             false
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_reload, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_reload -> {
+                loadEverything()
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private fun loadEverything() {
+        Client.getClient(mainActivity).api.getCompanies(0)
+            .enqueue(object : retrofit2.Callback<CompaniesResponse> {
+                override fun onResponse(
+                    call: Call<CompaniesResponse>,
+                    r: Response<CompaniesResponse>
+                ) {
+                    r.body()?.data?.forEach {
+                        makeProposalsCall(it.toCompany())
+                    }
+                }
+
+                override fun onFailure(call: Call<CompaniesResponse>, t: Throwable) {
+                }
+            })
     }
 
     private fun makeProposalsCall(c: Company) {
