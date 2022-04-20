@@ -62,9 +62,8 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>(), ClickHandler {
         }
 
         mapView?.getMapboxMap()?.addOnMapClickListener(onMapClickListener = {
-            if (bottomSheet.state == BottomSheetBehavior.STATE_EXPANDED) {
-                bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
-            }
+            bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+            binding.includeBottomSheet.company = null
             false
         })
     }
@@ -127,7 +126,7 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>(), ClickHandler {
             val annotationApi = mapView?.annotations
             val pointAnnotationManager = annotationApi?.createPointAnnotationManager(mapView!!)
             pointAnnotationManager?.addClickListener(OnPointAnnotationClickListener {
-                clickedOnPin(c, p.isEmpty())
+                clickedOnPin(c, p)
                 true
             })
             // Set options for the resulting symbol layer.
@@ -142,7 +141,7 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>(), ClickHandler {
         }
     }
 
-    private fun clickedOnPin(c: Company, empty: Boolean) {
+    private fun clickedOnPin(c: Company, p: List<Proposal>) {
         Picasso.get().load(c.image).into(binding.includeBottomSheet.ivCompany)
         val camera: CameraOptions = CameraOptions.Builder()
             .center(Point.fromLngLat(c.longitude!!, c.latitude!!))
@@ -152,8 +151,8 @@ class HomeFragment : FragmentStructure<FragmentHomeBinding>(), ClickHandler {
         mapView?.getMapboxMap()
             ?.flyTo(camera, MapAnimationOptions.mapAnimationOptions { duration(1000) })
         binding.includeBottomSheet.company = c
+        binding.includeBottomSheet.proposalsNumber = p.size
         bottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
-        binding.includeBottomSheet.btnProposals.isEnabled = !empty
     }
 
     private fun bitmapFromDrawableRes(context: Context, @DrawableRes resourceId: Int) =

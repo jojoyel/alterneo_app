@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="no_offer" translatable="false">Pas d\'offre</string>
+	<string name="cont_desc_company_image">Image de l\'entreprise</string>
+	<string name="offers_format">Offres (%d)</string>
+</resources>
