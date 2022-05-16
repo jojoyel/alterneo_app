@@ -8,4 +8,5 @@
 	<string name="cont_desc_company_image">Company Image</string>
 
 	<string name="address_format">%s, %s %s</string>
+	<string name="title_activity_main2">MainActivity2</string>
 </resources>
