@@ -5,9 +5,6 @@
 
 	<data>
 
-		<variable
-			name="company"
-			type="com.alterneo.alterneo_app.models.Company" />
 	</data>
 
 	<com.google.android.material.card.MaterialCardView
@@ -40,7 +37,6 @@
 					style="@style/ImportantText"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="@{company.name}"
 					tools:text="Entreprise texte" />
 
 				<TextView
@@ -53,7 +49,6 @@
 					android:id="@+id/tvEmployeesNumber"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="@{company.employee_number}"
 					tools:text="512" />
 			</LinearLayout>
 		</androidx.constraintlayout.widget.ConstraintLayout>
