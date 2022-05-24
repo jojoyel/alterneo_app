@@ -1,16 +1,18 @@
 package com.alterneo.alterneo_app.feature_map.data.remote.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class UserDto(
-    val birth_date: String,
+    @SerializedName("birth_date") val birthDate: String,
     val city: String,
     val country: String,
     val email: String,
-    val first_name: String,
+    @SerializedName("first_name") val firstName: String,
     val id: Int,
-    val last_name: String,
+    @SerializedName("last_name") val lastName: String,
     val misc: String,
     val password: String,
-    val postal_code: String,
+    @SerializedName("postal_code") val postalCode: String,
     val resume: String,
     val skills: String,
     val tel: String
