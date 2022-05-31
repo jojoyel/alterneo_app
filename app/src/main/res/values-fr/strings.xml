@@ -3,4 +3,27 @@
 	<string name="no_offer">Pas d\'offre</string>
 	<string name="cont_desc_company_image">Image de l\'entreprise</string>
 	<string name="offers_format">Offres (%d)</string>
+
+	<string name="busi_agriculture">Agriculture, Sylviculture et Pêche</string>
+	<string name="busi_extractive">Industries extractives</string>
+	<string name="busi_manufacturing">Industrie manufacturière</string>
+	<string name="busi_electricity">Production et distribution en électricité</string>
+	<string name="busi_water">Production et distribution en eau</string>
+	<string name="busi_waste">Gestion des déchets et dépollution</string>
+	<string name="busi_construction">Construction</string>
+	<string name="busi_automoto">Commerce, réparation automobile et moto</string>
+	<string name="busi_transport">Transport et entreposage</string>
+	<string name="busi_accomodation">Hébergement et restauration</string>
+	<string name="busi_information">Information et communication</string>
+	<string name="busi_financial">Activités financières et assurances</string>
+	<string name="busi_realestate">Activités immobilières</string>
+	<string name="busi_scientific">Activités Spécialisées, Scientifique</string>
+	<string name="busi_adminservices">Activités de services Administratif</string>
+	<string name="busi_publicadmin">Administration publique</string>
+	<string name="busi_education">Enseignement</string>
+	<string name="busi_health">Santé humaine et Action Sociales</string>
+	<string name="busi_arts">Arts, Spectacles et activités récréative</string>
+	<string name="busi_other">Autres activités de Services</string>
+	<string name="busi_extraterritorial">Activités Extra-Territoriales</string>
+	<string name="busi_households">Activités des Ménages (employeur)></string>
 </resources>

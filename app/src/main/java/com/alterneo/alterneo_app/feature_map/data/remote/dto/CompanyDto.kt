@@ -9,9 +9,11 @@ data class CompanyDto(
     val id: Int,
     val image: String,
     val latitude: String,
-    val longitude: String
+    val longitude: String,
+    @SerializedName("company_registration") val companyRegistration: CompanyRegistrationDto? = null
 ) {
     fun toCompany() = Company(
+        companyRegistration = companyRegistration?.toCompanyRegistration(),
         companyRegistrationId = companyRegistrationId,
         active = active,
         id = id,

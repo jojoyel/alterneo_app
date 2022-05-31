@@ -15,7 +15,6 @@ data class CompanyRegistration(
     val name: String = "",
     val postalCode: String = "",
     val siret: String = "",
-    val status: String = "",
     val tel: String = "",
     val url: String = "",
     val verified: Boolean = false

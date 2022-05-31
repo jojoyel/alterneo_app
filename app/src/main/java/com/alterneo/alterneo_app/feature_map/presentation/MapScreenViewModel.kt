@@ -7,7 +7,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alterneo.alterneo_app.feature_map.domain.model.Company
 import com.alterneo.alterneo_app.feature_map.domain.use_case.GetCompaniesLocationsUseCase
+import com.alterneo.alterneo_app.feature_map.domain.use_case.GetCompanyProposalUseCase
+import com.alterneo.alterneo_app.feature_map.domain.use_case.GetCompanyRegistrationUseCase
 import com.alterneo.alterneo_app.utils.Resource
 import com.alterneo.alterneo_app.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,12 +23,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapScreenViewModel @Inject constructor(
-    private val getCompaniesLocationsUseCase: GetCompaniesLocationsUseCase
+    private val getCompaniesLocationsUseCase: GetCompaniesLocationsUseCase,
+    private val getCompanyRegistrationUseCase: GetCompanyRegistrationUseCase,
+    private val getCompanyProposalsUseCase: GetCompanyProposalUseCase
 ) : ViewModel() {
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
     var state by mutableStateOf(MapScreenState())
+
+    var companies by mutableStateOf(ArrayList<Company>())
 
     init {
         loadCompanies()
@@ -35,14 +42,17 @@ class MapScreenViewModel @Inject constructor(
         getCompaniesLocationsUseCase(page).onEach { result ->
             when (result) {
                 is Resource.Success -> {
-                    state = state.copy(companies = result.data?.data?.map { companyDto -> companyDto.toCompany() }!!.toMutableList() )
-                    if (result.data.totalReturned == 50) loadCompanies(page + 1)
+                    sendUiEvent(UiEvent.LoadingChange(false))
+                    companies =
+                        (result.data?.data?.map { companyDto -> companyDto.toCompany() } as ArrayList<Company>?)!!
+                    if (result.data?.totalReturned == 50) loadCompanies(page + 1)
                 }
                 is Resource.Error -> {
                     sendUiEvent(UiEvent.ShowSnackbar("Problème lors de la récupération des entreprises"))
+                    sendUiEvent(UiEvent.LoadingChange(false))
                 }
                 is Resource.Loading -> {
-                    sendUiEvent(UiEvent.ShowSnackbar("Ca charge"))
+                    sendUiEvent(UiEvent.LoadingChange(true))
                 }
             }
         }.launchIn(viewModelScope)
@@ -51,15 +61,45 @@ class MapScreenViewModel @Inject constructor(
     @OptIn(ExperimentalMaterialApi::class)
     fun onEvent(event: MapEvent) {
         when (event) {
-            is MapEvent.OnMapClicked -> {
-                state.selectedCompany = null
-                sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Collapsed))
-            }
             is MapEvent.OnPinClicked -> {
-                state = state.copy(
-                    selectedCompany = event.company
-                )
                 sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Expanded))
+                viewModelScope.launch {
+                    getCompanyRegistrationUseCase.invoke(event.company.companyRegistrationId)
+                        .collect { result ->
+                            when (result) {
+                                is Resource.Success -> {
+                                    val c =
+                                        event.company.copy(companyRegistration = result.data?.toCompanyRegistration())
+                                    state = state.copy(selectedCompany = c)
+                                }
+                                is Resource.Error -> {
+                                    sendUiEvent(UiEvent.ShowSnackbar("Error"))
+                                }
+                                is Resource.Loading -> {
+                                }
+                            }
+                        }
+                    getCompanyProposalsUseCase.invoke(event.company.id)
+                        .collect { result ->
+                            when (result) {
+                                is Resource.Success -> {
+                                    val c =
+                                        state.selectedCompany?.copy(proposals = result.data?.data?.map { it -> it.toProposal() })
+                                    state = state.copy(selectedCompany = c)
+                                }
+                                is Resource.Loading -> {
+
+                                }
+                                is Resource.Error -> {
+
+                                }
+                            }
+                        }
+                }
+            }
+            is MapEvent.OnMapClicked -> {
+                sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Collapsed))
+                state = state.copy(selectedCompany = null)
             }
         }
     }

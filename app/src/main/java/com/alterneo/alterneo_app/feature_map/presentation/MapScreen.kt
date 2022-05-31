@@ -11,13 +11,13 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alterneo.alterneo_app.R
 import com.alterneo.alterneo_app.feature_map.domain.model.Company
@@ -43,6 +43,8 @@ fun MapScreen(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
 
+    var isSomethingLoading by remember { mutableStateOf(false) }
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
@@ -52,12 +54,15 @@ fun MapScreen(
                             bottomSheetScaffoldState.bottomSheetState.expand()
                         }
                         BottomSheetValue.Collapsed -> {
-                            bottomSheetScaffoldState.bottomSheetState.collapse()
+//                            bottomSheetScaffoldState.bottomSheetState.collapse()
                         }
                     }
                 }
                 is UiEvent.ShowSnackbar -> {
                     bottomSheetScaffoldState.snackbarHostState.showSnackbar(event.message)
+                }
+                is UiEvent.LoadingChange -> {
+                    isSomethingLoading = event.loading
                 }
                 else -> {}
             }
@@ -82,7 +87,7 @@ fun MapScreen(
                         shape = RoundedCornerShape(100)
                     ) {}
                     Spacer(modifier = Modifier.height(16.dp))
-                    Divider()
+                    Divider(modifier = Modifier.padding(bottom = 8.dp))
                     viewModel.state.selectedCompany?.let {
                         CompanyCard(company = it)
                     }
@@ -99,31 +104,43 @@ fun MapScreen(
             modifier = Modifier.padding(0.dp),
             sheetPeekHeight = 40.dp
         ) { paddingValues ->
-            AndroidView(factory = {
-                View.inflate(it, R.layout.map_layout, null)
-            },
-                update = {
-                    val mapView = it.findViewById<MapView>(R.id.mapView)
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (isSomethingLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .zIndex(10f)
+                            .size(32.dp)
+                            .align(Alignment.TopEnd)
+                            .offset(x = (-12).dp, y = 12.dp)
+                    )
+                }
+                AndroidView(factory = {
+                    View.inflate(it, R.layout.map_layout, null)
+                },
+                    update = {
+                        val mapView = it.findViewById<MapView>(R.id.mapView)
 
-                    mapView?.let { mapView ->
-                        mapView.getMapboxMap().apply {
-                            loadStyleUri(
-                                Style.MAPBOX_STREETS
-                            ) {
-                                mapView.scalebar.enabled = false
+                        mapView?.let { mv ->
+                            mv.getMapboxMap().apply {
+                                loadStyleUri(
+                                    Style.MAPBOX_STREETS
+                                ) {
+                                    mv.scalebar.enabled = false
+                                }
+                                addOnMapClickListener(onMapClickListener = {
+                                    viewModel.onEvent(MapEvent.OnMapClicked)
+                                    false
+                                })
                             }
-                            addOnMapClickListener(onMapClickListener = {
-                                viewModel.onEvent(MapEvent.OnMapClicked)
-                                false
-                            })
-                        }
-                        viewModel.state.companies.forEach { company ->
-                            addAnnotationToMap(mapView, company) { c ->
-                                viewModel.onEvent(MapEvent.OnPinClicked(c))
+                            viewModel.companies.forEach { company ->
+                                addAnnotationToMap(mv, company) { c ->
+                                    viewModel.onEvent(MapEvent.OnPinClicked(c))
+                                }
                             }
                         }
-                    }
-                })
+                    })
+
+            }
         }
     }
 }

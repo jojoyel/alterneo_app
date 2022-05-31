@@ -39,5 +39,6 @@ object AppModule {
     @Singleton
     fun provideMapRepository(api: AlterneoAPI): Repository {
         return RepositoryImpl(api)
+//        return RepositoryTestImpl()
     }
 }

@@ -8,4 +8,26 @@
 
 	<string name="address_format" translatable="false">%s, %s %s</string>
 	<string name="offers_format">Offers (%d)</string>
+	<string name="busi_agriculture">Agriculture, Forestry and Fisheries</string>
+	<string name="busi_extractive">Extractive Industries</string>
+	<string name="busi_manufacturing">Manufacturing Industry</string>
+	<string name="busi_electricity">Electricity production and distribution</string>
+	<string name="busi_water">Water production and distribution</string>
+	<string name="busi_waste">Waste management and depollution</string>
+	<string name="busi_construction">Construction</string>
+	<string name="busi_automoto">Automobile and Motorcycle trade, repair</string>
+	<string name="busi_transport">Transportation and Storage</string>
+	<string name="busi_accomodation">Accommodation and catering</string>
+	<string name="busi_information">Information and communication</string>
+	<string name="busi_financial">Financial Activities and Insurance</string>
+	<string name="busi_realestate">Real estate activities</string>
+	<string name="busi_scientific">Specialized Activities, Scientific</string>
+	<string name="busi_adminservices">Administrative service activities</string>
+	<string name="busi_publicadmin">Public administration</string>
+	<string name="busi_education">Education</string>
+	<string name="busi_health">Human Health and Social Action</string>
+	<string name="busi_arts">Arts, Entertainment and Recreational Activities</string>
+	<string name="busi_other">Other Service activities</string>
+	<string name="busi_extraterritorial">Extra-Territorial Activities</string>
+	<string name="busi_households">Activities of Households as an employee</string>
 </resources>

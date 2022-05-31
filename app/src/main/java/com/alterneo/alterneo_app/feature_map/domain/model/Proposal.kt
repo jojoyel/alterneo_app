@@ -6,14 +6,14 @@ data class Proposal(
     val applicationLimit: Int = 0,
     val applicationLimitDate: String = "",
     val companyId: Int = 0,
-    val contractType: String = "",
+    val contractType: Int = 0,
     val creationTime: Long = 0,
     val description: String = "",
     val durationDay: Int = 0,
     val durationMonth: Int = 0,
-    val durationWeeks: Int = 0,
+    val durationWeek: Int = 0,
     val durationYear: Int = 0,
     val emergencyLevel: Int = 0,
-    val requieredSkills: String = "",
+    val required_skills: String = "",
     val url: String = ""
 )

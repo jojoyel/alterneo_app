@@ -7,5 +7,6 @@ data class Company(
     val id: Int = 0,
     val image: String = "",
     val latitude: String = "",
-    val longitude: String = ""
+    val longitude: String = "",
+    val proposals: List<Proposal>? = null
 )
