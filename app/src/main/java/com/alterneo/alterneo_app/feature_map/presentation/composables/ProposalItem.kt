@@ -16,10 +16,10 @@ import com.alterneo.alterneo_app.feature_map.domain.model.Proposal
 fun ProposalItem(proposal: Proposal, companyName: String, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
-            .padding(16.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        elevation = 4.dp
     ) {
-        Column() {
+        Column(modifier = Modifier.padding(8.dp)) {
             Text(text = proposal.title, style = MaterialTheme.typography.h5)
             Text(text = "${proposal.contractType} / $companyName")
             if (proposal.contractType != 1) {

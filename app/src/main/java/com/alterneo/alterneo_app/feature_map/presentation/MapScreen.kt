@@ -91,14 +91,6 @@ fun MapScreen(
                     viewModel.state.selectedCompany?.let {
                         CompanyCard(company = it)
                     }
-                    Text(
-                        text = "Bonjour",
-                        Modifier
-                            .padding(24.dp)
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-
                 }
             },
             modifier = Modifier.padding(0.dp),
