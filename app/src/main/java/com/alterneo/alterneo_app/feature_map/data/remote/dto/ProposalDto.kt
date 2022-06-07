@@ -16,7 +16,7 @@ data class ProposalDto(
     @SerializedName("duration_week") val durationWeek: Int,
     @SerializedName("duration_year") val durationYear: Int,
     @SerializedName("emergency_level") val emergencyLevel: Int,
-    @SerializedName("is_active") val isActive: Int,
+    @SerializedName("is_active") val isActive: Boolean,
     @SerializedName("required_skills") val requiredSkills: String,
     val title: String,
     val url: String

@@ -7,21 +7,21 @@ import retrofit2.http.Query
 
 interface AlterneoAPI {
 
-    @GET("/v1/company/")
+    @GET("/v2/company/")
     suspend fun getCompanies(@Query("page") page: Int): ArrayDto<CompanyRegistrationDto>
 
-    @GET("/v1/company/{id}")
+    @GET("/v2/company/{id}")
     suspend fun getCompany(@Path("id") id: Int): CompanyRegistrationDto
 
-    @GET("/v1/companyLocation/")
+    @GET("/v2/companyLocation/")
     suspend fun getCompaniesLocations(@Query("page") page: Int): ArrayDto<CompanyDto>
 
-    @GET("/v1/companyLocation/{id}")
+    @GET("/v2/companyLocation/{id}")
     suspend fun getCompanyLocation(@Path("id") id: Int): CompanyDto
 
-    @GET("/v1/companyProposals/{id}")
+    @GET("/v2/companyProposals/{id}")
     suspend fun getCompanyProposals(@Path("id") companyId: Int): ArrayDto<ProposalDto>
 
-    @GET("/v1/companyProposalsCount/{id}")
+    @GET("/v2/companyProposalsCount/{id}")
     suspend fun getCompanyProposalsCount(@Path("id") companyId: Int): CountDto
 }

@@ -98,7 +98,6 @@ fun MapScreen(
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
-
                 }
             },
             modifier = Modifier.padding(0.dp),
