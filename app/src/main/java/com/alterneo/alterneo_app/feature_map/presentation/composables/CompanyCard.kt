@@ -1,5 +1,6 @@
 package com.alterneo.alterneo_app.feature_map.presentation.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -68,7 +70,9 @@ fun CompanyCard(company: Company, modifier: Modifier = Modifier) {
                     }
                 }
             }
-            LazyColumn() {
+            LazyColumn(modifier = Modifier
+                .padding(12.dp)
+                .background(Color.Black)) {
                 company.proposals?.let {
                     items(it) { proposal ->
                         ProposalItem(proposal = proposal, company.companyRegistration.name)

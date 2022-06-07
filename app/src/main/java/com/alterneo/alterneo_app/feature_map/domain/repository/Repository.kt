@@ -1,7 +1,6 @@
 package com.alterneo.alterneo_app.feature_map.domain.repository
 
 import com.alterneo.alterneo_app.feature_map.data.remote.dto.*
-import com.alterneo.alterneo_app.feature_map.domain.model.Proposal
 
 interface Repository {
 
