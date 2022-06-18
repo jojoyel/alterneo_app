@@ -1,5 +1,6 @@
 package com.alterneo.alterneo_app.feature_map.presentation
 
+import android.content.SharedPreferences
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.getValue
@@ -11,7 +12,9 @@ import com.alterneo.alterneo_app.feature_map.domain.model.Company
 import com.alterneo.alterneo_app.feature_map.domain.use_case.GetCompaniesLocationsUseCase
 import com.alterneo.alterneo_app.feature_map.domain.use_case.GetCompanyProposalUseCase
 import com.alterneo.alterneo_app.feature_map.domain.use_case.GetCompanyRegistrationUseCase
+import com.alterneo.alterneo_app.utils.Constants
 import com.alterneo.alterneo_app.utils.Resource
+import com.alterneo.alterneo_app.utils.Routes
 import com.alterneo.alterneo_app.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -25,7 +28,8 @@ import javax.inject.Inject
 class MapScreenViewModel @Inject constructor(
     private val getCompaniesLocationsUseCase: GetCompaniesLocationsUseCase,
     private val getCompanyRegistrationUseCase: GetCompanyRegistrationUseCase,
-    private val getCompanyProposalsUseCase: GetCompanyProposalUseCase
+    private val getCompanyProposalsUseCase: GetCompanyProposalUseCase,
+    private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -48,8 +52,13 @@ class MapScreenViewModel @Inject constructor(
                     if (result.data?.totalReturned == 50) loadCompanies(page + 1)
                 }
                 is Resource.Error -> {
-                    sendUiEvent(UiEvent.ShowSnackbar("Problème lors de la récupération des entreprises"))
-                    sendUiEvent(UiEvent.LoadingChange(false))
+                    if (result.message == "403") {
+                        sharedPreferences.edit().putString(Constants.SHARED_PREF_JWT, null).apply()
+                        sendUiEvent(UiEvent.Navigate(Routes.LOGIN_ROUTE))
+                    } else {
+                        sendUiEvent(UiEvent.ShowSnackbar("Problème lors de la récupération des entreprises"))
+                        sendUiEvent(UiEvent.LoadingChange(false))
+                    }
                 }
                 is Resource.Loading -> {
                     sendUiEvent(UiEvent.LoadingChange(true))

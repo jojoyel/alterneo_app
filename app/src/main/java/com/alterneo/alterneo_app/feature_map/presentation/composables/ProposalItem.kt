@@ -20,12 +20,12 @@ fun ProposalItem(proposal: Proposal, companyName: String, modifier: Modifier = M
         elevation = 4.dp
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            Text(text = proposal.title, style = MaterialTheme.typography.h5)
+            Text(text = proposal.title ?: "Nom indisponible", style = MaterialTheme.typography.h5)
             Text(text = "${proposal.contractType} / $companyName")
             if (proposal.contractType != 1) {
                 Text(text = buildString(proposal))
             }
-            if (proposal.required_skills.isNotBlank())
+            if (proposal.required_skills?.isNotBlank() == true)
                 Text(
                     text = proposal.required_skills,
                     maxLines = 1,
@@ -37,20 +37,24 @@ fun ProposalItem(proposal: Proposal, companyName: String, modifier: Modifier = M
 
 fun buildString(proposal: Proposal): String {
     var s = ""
-    if (proposal.durationYear > 0) {
-        val hasS = if (proposal.durationYear > 1) "s" else ""
-        s += "${proposal.durationYear} an$hasS "
+    proposal.durationYear?.let {
+        if (it > 0) {
+            val hasS = if (it > 1) "s" else ""
+            s += "$it an$hasS "
+        }
     }
-    if (proposal.durationMonth > 0) {
-        s += "${proposal.durationMonth} mois "
+    proposal.durationMonth?.let {
+        s += "$it mois "
     }
-    if (proposal.durationWeek > 0) {
-        val hasS = if (proposal.durationWeek > 1) "s" else ""
-        s += "${proposal.durationWeek} semaine$hasS "
+    proposal.durationWeek?.let {
+        val hasS = if (it > 1) "s" else ""
+        s += "$it semaine$hasS "
     }
-    if (proposal.durationDay > 0) {
-        val hasS = if (proposal.durationDay > 1) "s" else ""
-        s += "${proposal.durationDay} jour$hasS "
+    proposal.durationDay?.let {
+        if (it > 0) {
+            val hasS = if (it > 1) "s" else ""
+            s += "$it jour$hasS "
+        }
     }
     return s
 }

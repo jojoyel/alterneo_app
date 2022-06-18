@@ -11,6 +11,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.alterneo.alterneo_app.R
 import com.alterneo.alterneo_app.feature_map.domain.model.Company
 import com.alterneo.alterneo_app.feature_map.presentation.composables.CompanyCard
@@ -37,6 +40,7 @@ import com.mapbox.maps.plugin.scalebar.scalebar
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MapScreen(
+    navController: NavController,
     viewModel: MapScreenViewModel = hiltViewModel()
 ) {
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
@@ -64,7 +68,9 @@ fun MapScreen(
                 is UiEvent.LoadingChange -> {
                     isSomethingLoading = event.loading
                 }
-                else -> {}
+                is UiEvent.Navigate -> {
+                    navController.navigate(event.route)
+                }
             }
         }
     }
@@ -72,6 +78,19 @@ fun MapScreen(
     Alterneo_appTheme {
         BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,
+            drawerContent = {
+                Text(text = "Bonjour")
+            },
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "Map") },
+                    navigationIcon = {
+                        IconButton(onClick = {}) {
+                            Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                        }
+                    }
+                )
+            },
             sheetContent = {
                 Column(
                     Modifier

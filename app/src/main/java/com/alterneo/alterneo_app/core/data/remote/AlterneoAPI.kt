@@ -1,9 +1,8 @@
 package com.alterneo.alterneo_app.core.data.remote
 
+import com.alterneo.alterneo_app.feature_login.data.remote.dto.LoginDto
 import com.alterneo.alterneo_app.feature_map.data.remote.dto.*
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface AlterneoAPI {
 
@@ -24,4 +23,10 @@ interface AlterneoAPI {
 
     @GET("/v2/companyProposalsCount/{id}")
     suspend fun getCompanyProposalsCount(@Path("id") companyId: Int): CountDto
+
+    @POST("/v2/login")
+    suspend fun login(
+        @Body loginBody: HashMap<String, String>,
+        @Header("user-agent") userAgent: String
+    ): LoginDto
 }
