@@ -8,8 +8,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.alterneo.alterneo_app.R
 import com.alterneo.alterneo_app.feature_map.domain.model.Proposal
 
 @Composable
@@ -23,7 +25,7 @@ fun ProposalItem(proposal: Proposal, companyName: String, modifier: Modifier = M
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = proposal.title ?: "Nom indisponible", style = MaterialTheme.typography.h5)
             Text(
-                text = "${proposal.contractType} / $companyName",
+                text = "${stringArrayResource(R.array.contract_types).getOrElse(proposal.contractType ?: 0) { 0 }} / $companyName",
                 color = MaterialTheme.typography.body1.color.copy(alpha = .5f)
             )
             if (proposal.contractType != 1) {
@@ -51,16 +53,19 @@ fun buildString(proposal: Proposal): String {
         }
     }
     proposal.durationMonth?.let {
-        s += "$it mois "
+        if (it > 0)
+            s += "$it mois "
     }
     proposal.durationWeek?.let {
-        val hasS = if (it > 1) "s" else ""
-        s += "$it semaine$hasS "
+        if (it > 0) {
+            val hasS = if (it > 1) "s" else ""
+            s += "$it semaine$hasS "
+        }
     }
     proposal.durationDay?.let {
         if (it > 0) {
             val hasS = if (it > 1) "s" else ""
-            s += "$it jour$hasS "
+            s += "$it jour$hasS"
         }
     }
     return s

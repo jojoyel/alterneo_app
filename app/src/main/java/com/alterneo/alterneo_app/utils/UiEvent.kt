@@ -8,5 +8,8 @@ sealed class UiEvent {
     data class LoadingChange(val loading: Boolean) : UiEvent()
     data class Navigate(val route: String) : UiEvent()
     data class ShowSnackbar(val message: String, val action: String? = null) : UiEvent()
-    data class MoveSheet @OptIn(ExperimentalMaterialApi::class) constructor(val bottomSheetValue: BottomSheetValue): UiEvent()
+    data class MoveSheet @OptIn(ExperimentalMaterialApi::class) constructor(val bottomSheetValue: BottomSheetValue) :
+        UiEvent()
+
+    data class MoveDrawer(val open: Boolean) : UiEvent()
 }

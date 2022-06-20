@@ -30,4 +30,9 @@
 	<string name="busi_other">Other Service activities</string>
 	<string name="busi_extraterritorial">Extra-Territorial Activities</string>
 	<string name="busi_households">Activities of Households as an employee</string>
+
+	<array name="contract_types">
+		<item>CDI</item>
+		<item>CDD</item>
+	</array>
 </resources>

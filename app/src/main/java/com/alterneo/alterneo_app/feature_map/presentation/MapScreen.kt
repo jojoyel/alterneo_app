@@ -16,7 +16,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
@@ -25,6 +24,7 @@ import androidx.navigation.NavController
 import com.alterneo.alterneo_app.R
 import com.alterneo.alterneo_app.feature_map.domain.model.Company
 import com.alterneo.alterneo_app.feature_map.presentation.composables.CompanyCard
+import com.alterneo.alterneo_app.feature_map.presentation.composables.DrawerContent
 import com.alterneo.alterneo_app.ui.theme.Alterneo_appTheme
 import com.alterneo.alterneo_app.utils.UiEvent
 import com.mapbox.geojson.Point
@@ -74,6 +74,15 @@ fun MapScreen(
                 is UiEvent.Navigate -> {
                     navController.navigate(event.route)
                 }
+                is UiEvent.MoveDrawer -> {
+                    coroutineScope.launch {
+                        if (event.open) {
+                            bottomSheetScaffoldState.drawerState.open()
+                        } else {
+                            bottomSheetScaffoldState.drawerState.close()
+                        }
+                    }
+                }
             }
         }
     }
@@ -82,15 +91,17 @@ fun MapScreen(
         BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,
             drawerGesturesEnabled = false,
-            drawerContent = {},
+            drawerContent = {
+                DrawerContent() { event ->
+                    viewModel.onEvent(MapEvent.OnDrawerEvent(event))
+                }
+            },
             topBar = {
                 TopAppBar(
                     title = { Text(text = "Map") },
                     navigationIcon = {
                         IconButton(onClick = {
-                            coroutineScope.launch {
-                                bottomSheetScaffoldState.drawerState.open()
-                            }
+                            viewModel.onEvent(MapEvent.OnTopBarEvent(TopBarEvent.SandwichMenuClicked))
                         }) {
                             Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                         }
@@ -116,18 +127,11 @@ fun MapScreen(
                     viewModel.state.selectedCompany?.let {
                         CompanyCard(company = it)
                     }
-                    Text(
-                        text = "Bonjour",
-                        Modifier
-                            .padding(24.dp)
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
                 }
             },
             modifier = Modifier.padding(0.dp),
             sheetPeekHeight = 40.dp
-        ) { paddingValues ->
+        ) { _ ->
             Box(modifier = Modifier.fillMaxSize()) {
                 if (isSomethingLoading) {
                     CircularProgressIndicator(
@@ -163,7 +167,6 @@ fun MapScreen(
                             }
                         }
                     })
-
             }
         }
     }

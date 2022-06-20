@@ -1,7 +1,6 @@
 package com.alterneo.alterneo_app.feature_login.presentation
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -40,14 +39,12 @@ class LoginViewModel @Inject constructor(
         loginUseCase(state.email, state.password).onEach { result ->
             when (result) {
                 is Resource.Success -> {
-                    Log.d("LOGMOICA", "doLogin: ${result.data?.jwtToken}")
                     sendUiEvent(UiEvent.Navigate(Routes.MAP_ROUTE))
                 }
                 is Resource.Error -> {
                     sendUiEvent(UiEvent.ShowSnackbar("Identifiants incorrects"))
                 }
                 is Resource.Loading -> {
-                    Log.d("LOGMOICA", "Ca charge")
                 }
             }
         }.launchIn(viewModelScope)

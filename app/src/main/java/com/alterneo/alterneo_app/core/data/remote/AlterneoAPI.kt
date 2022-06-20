@@ -29,4 +29,7 @@ interface AlterneoAPI {
         @Body loginBody: HashMap<String, String>,
         @Header("user-agent") userAgent: String
     ): LoginDto
+
+    @GET("/v2/user/{id}")
+    suspend fun getUser(@Path("id") userId: Int): UserDto
 }

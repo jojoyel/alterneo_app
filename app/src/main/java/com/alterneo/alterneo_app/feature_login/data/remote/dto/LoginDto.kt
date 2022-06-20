@@ -5,5 +5,6 @@ import com.google.gson.annotations.SerializedName
 data class LoginDto(
     val message: String,
     @SerializedName("jwt_token") val jwtToken: String,
-    @SerializedName("refresh_token") val refreshToken: String
+    @SerializedName("refresh_token") val refreshToken: String,
+    @SerializedName("user_id") val id: Int
 )

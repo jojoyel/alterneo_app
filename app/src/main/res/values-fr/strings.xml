@@ -26,4 +26,9 @@
 	<string name="busi_other">Autres activités de Services</string>
 	<string name="busi_extraterritorial">Activités Extra-Territoriales</string>
 	<string name="busi_households">Activités des Ménages (employeur)></string>
+
+	<array name="contract_types">
+		<item>Permanent contract</item>
+		<item>Fixed-term contract</item>
+	</array>
 </resources>

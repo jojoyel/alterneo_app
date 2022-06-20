@@ -6,6 +6,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alterneo.alterneo_app.feature_map.domain.model.Company
@@ -35,6 +36,7 @@ class MapScreenViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     var state by mutableStateOf(MapScreenState())
+
 
     var companies by mutableStateOf(ArrayList<Company>())
 
@@ -71,7 +73,6 @@ class MapScreenViewModel @Inject constructor(
     fun onEvent(event: MapEvent) {
         when (event) {
             is MapEvent.OnPinClicked -> {
-                sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Expanded))
                 viewModelScope.launch {
                     getCompanyRegistrationUseCase.invoke(event.company.companyRegistrationId)
                         .collect { result ->
@@ -85,6 +86,7 @@ class MapScreenViewModel @Inject constructor(
                                     sendUiEvent(UiEvent.ShowSnackbar("Error"))
                                 }
                                 is Resource.Loading -> {
+
                                 }
                             }
                         }
@@ -104,11 +106,33 @@ class MapScreenViewModel @Inject constructor(
                                 }
                             }
                         }
+                    sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Expanded))
                 }
             }
             is MapEvent.OnMapClicked -> {
 //                sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Collapsed))
 //                state = state.copy(selectedCompany = null)
+            }
+            is MapEvent.OnDrawerEvent -> {
+                processDrawerEvent(event.drawerEvent)
+            }
+            is MapEvent.OnTopBarEvent -> {
+                sendUiEvent(UiEvent.MoveDrawer(true))
+            }
+        }
+    }
+
+    private fun processDrawerEvent(drawerEvent: DrawerEvent) {
+        when (drawerEvent) {
+            is DrawerEvent.LogoutClicked -> {
+                sharedPreferences.edit {
+                    remove(Constants.SHARED_PREF_JWT)
+                    remove(Constants.SHARED_PREF_REFRESH_JWT)
+                }
+                sendUiEvent(UiEvent.Navigate(Routes.LOGIN_ROUTE))
+            }
+            is DrawerEvent.CloseClicked -> {
+                sendUiEvent(UiEvent.MoveDrawer(false))
             }
         }
     }
