@@ -16,14 +16,21 @@ import com.alterneo.alterneo_app.feature_map.domain.model.Proposal
 fun ProposalItem(proposal: Proposal, companyName: String, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(8.dp),
         elevation = 4.dp
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = proposal.title ?: "Nom indisponible", style = MaterialTheme.typography.h5)
-            Text(text = "${proposal.contractType} / $companyName")
+            Text(
+                text = "${proposal.contractType} / $companyName",
+                color = MaterialTheme.typography.body1.color.copy(alpha = .5f)
+            )
             if (proposal.contractType != 1) {
-                Text(text = buildString(proposal))
+                Text(
+                    text = buildString(proposal),
+                    color = MaterialTheme.typography.body1.color.copy(alpha = .5f)
+                )
             }
             if (proposal.required_skills?.isNotBlank() == true)
                 Text(

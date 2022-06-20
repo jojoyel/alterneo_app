@@ -107,8 +107,8 @@ class MapScreenViewModel @Inject constructor(
                 }
             }
             is MapEvent.OnMapClicked -> {
-                sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Collapsed))
-                state = state.copy(selectedCompany = null)
+//                sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Collapsed))
+//                state = state.copy(selectedCompany = null)
             }
         }
     }

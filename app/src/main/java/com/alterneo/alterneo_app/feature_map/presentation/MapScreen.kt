@@ -36,6 +36,7 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.scalebar.scalebar
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -46,6 +47,8 @@ fun MapScreen(
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
+
+    val coroutineScope = rememberCoroutineScope()
 
     var isSomethingLoading by remember { mutableStateOf(false) }
 
@@ -58,7 +61,7 @@ fun MapScreen(
                             bottomSheetScaffoldState.bottomSheetState.expand()
                         }
                         BottomSheetValue.Collapsed -> {
-//                            bottomSheetScaffoldState.bottomSheetState.collapse()
+                            bottomSheetScaffoldState.bottomSheetState.collapse()
                         }
                     }
                 }
@@ -78,14 +81,17 @@ fun MapScreen(
     Alterneo_appTheme {
         BottomSheetScaffold(
             scaffoldState = bottomSheetScaffoldState,
-            drawerContent = {
-                Text(text = "Bonjour")
-            },
+            drawerGesturesEnabled = false,
+            drawerContent = {},
             topBar = {
                 TopAppBar(
                     title = { Text(text = "Map") },
                     navigationIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = {
+                            coroutineScope.launch {
+                                bottomSheetScaffoldState.drawerState.open()
+                            }
+                        }) {
                             Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                         }
                     }
@@ -172,7 +178,7 @@ private fun addAnnotationToMap(mapView: MapView?, c: Company, onClicked: (Compan
             val pointAnnotationManager = annotationApi.createPointAnnotationManager()
             pointAnnotationManager.addClickListener(OnPointAnnotationClickListener {
                 onClicked(c)
-                true
+                false
             })
 
             val pointAnnotationOptions = PointAnnotationOptions()
@@ -191,7 +197,6 @@ private fun addAnnotationToMap(mapView: MapView?, c: Company, onClicked: (Compan
 
             pointAnnotationManager.create(pointAnnotationOptions)
         }
-
     }
 }
 

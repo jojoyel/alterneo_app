@@ -19,7 +19,10 @@ class DoLoginUseCase @Inject constructor(
         try {
             emit(Resource.Loading<LoginDto>())
             val login = loginRepository.login(email, password)
-            sharedPreferences.edit().putString(Constants.SHARED_PREF_JWT, login.jwtToken).apply()
+            sharedPreferences.edit()
+                .putString(Constants.SHARED_PREF_JWT, login.jwtToken)
+                .putString(Constants.SHARED_PREF_REFRESH_JWT, login.refreshToken)
+                .apply()
             emit(Resource.Success<LoginDto>(login))
         } catch (e: HttpException) {
             emit(Resource.Error<LoginDto>(e.localizedMessage ?: "Une erreur inconnue est apparue"))

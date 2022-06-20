@@ -25,7 +25,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Singleton
     @Provides
     fun provideClient(sharedPreferences: SharedPreferences): AlterneoAPI {
         val okClient = OkHttpClient.Builder()
