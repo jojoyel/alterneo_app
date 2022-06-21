@@ -31,8 +31,10 @@
 	<string name="busi_extraterritorial">Extra-Territorial Activities</string>
 	<string name="busi_households">Activities of Households as an employee</string>
 
-	<array name="contract_types">
-		<item>CDI</item>
-		<item>CDD</item>
-	</array>
+	<string name="contract_permanent">Permanent contract</string>
+	<string name="contract_fixed">Fixed-term contract</string>
+	<string name="contract_temp">Temporary contract</string>
+	<string name="contract_integ">Single integration contract</string>
+	<string name="contract_support">Job support contract</string>
+	<string name="contract_initiative">Employment initiative contract</string>
 </resources>

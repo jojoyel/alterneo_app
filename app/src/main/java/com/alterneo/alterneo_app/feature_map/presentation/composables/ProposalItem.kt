@@ -8,11 +8,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.alterneo.alterneo_app.R
 import com.alterneo.alterneo_app.feature_map.domain.model.Proposal
+import com.alterneo.alterneo_app.utils.ContractEnum
 
 @Composable
 fun ProposalItem(proposal: Proposal, companyName: String, modifier: Modifier = Modifier) {
@@ -25,7 +25,7 @@ fun ProposalItem(proposal: Proposal, companyName: String, modifier: Modifier = M
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = proposal.title ?: "Nom indisponible", style = MaterialTheme.typography.h5)
             Text(
-                text = "${stringArrayResource(R.array.contract_types).getOrElse(proposal.contractType ?: 0) { 0 }} / $companyName",
+                text = "${stringResource(id = ContractEnum.findContractById(proposal.id)?.id ?: ContractEnum.CDI.id)} / $companyName",
                 color = MaterialTheme.typography.body1.color.copy(alpha = .5f)
             )
             if (proposal.contractType != 1) {

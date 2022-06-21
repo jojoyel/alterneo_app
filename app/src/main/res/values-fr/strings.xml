@@ -27,8 +27,10 @@
 	<string name="busi_extraterritorial">Activités Extra-Territoriales</string>
 	<string name="busi_households">Activités des Ménages (employeur)></string>
 
-	<array name="contract_types">
-		<item>Permanent contract</item>
-		<item>Fixed-term contract</item>
-	</array>
+	<string name="contract_permanent">CDD</string>
+	<string name="contract_fixed">CDI</string>
+	<string name="contract_temp">CTT</string>
+	<string name="contract_integ">CUI</string>
+	<string name="contract_support">CAE</string>
+	<string name="contract_initiative">CIE</string>
 </resources>
