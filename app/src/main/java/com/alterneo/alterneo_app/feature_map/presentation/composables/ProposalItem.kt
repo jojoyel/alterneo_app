@@ -25,7 +25,7 @@ fun ProposalItem(proposal: Proposal, companyName: String, modifier: Modifier = M
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = proposal.title ?: "Nom indisponible", style = MaterialTheme.typography.h5)
             Text(
-                text = "${stringResource(id = ContractEnum.findContractById(proposal.id)?.id ?: ContractEnum.CDI.id)} / $companyName",
+                text = "${stringResource(id = ContractEnum.findContractById(proposal.id)?.string ?: ContractEnum.CDI.string)} / $companyName",
                 color = MaterialTheme.typography.body1.color.copy(alpha = .5f)
             )
             if (proposal.contractType != 1) {
