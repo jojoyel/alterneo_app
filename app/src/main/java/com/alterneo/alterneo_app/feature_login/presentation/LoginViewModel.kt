@@ -7,6 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alterneo.alterneo_app.feature_login.domain.use_case.DoLoginUseCase
+import com.alterneo.alterneo_app.feature_login.domain.use_case.ValidateEmailUseCase
+import com.alterneo.alterneo_app.feature_login.domain.use_case.ValidatePasswordUseCase
 import com.alterneo.alterneo_app.utils.Constants
 import com.alterneo.alterneo_app.utils.Resource
 import com.alterneo.alterneo_app.utils.Routes
@@ -22,7 +24,9 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: DoLoginUseCase,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val validatePasswordUseCase: ValidatePasswordUseCase
 ) : ViewModel() {
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -59,7 +63,8 @@ class LoginViewModel @Inject constructor(
                 state = state.copy(password = event.password)
             }
             is LoginEvent.OnSubmit -> {
-                doLogin()
+                if (ValidateEmailUseCase)
+                    doLogin()
             }
         }
     }

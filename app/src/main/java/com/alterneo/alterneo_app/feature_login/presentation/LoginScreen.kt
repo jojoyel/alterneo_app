@@ -2,9 +2,8 @@ package com.alterneo.alterneo_app.feature_login.presentation
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -16,8 +15,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.alterneo.alterneo_app.ui.theme.Alterneo_appTheme
 import com.alterneo.alterneo_app.utils.UiEvent
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -43,77 +45,94 @@ fun LoginScreen(
         }
     }
 
-    Scaffold(scaffoldState = scaffoldState) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = "Connexion à votre compte")
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                OutlinedTextField(
-                    value = viewModel.state.email,
-                    singleLine = true,
-                    label = {
-                        Text("Email")
-                    },
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Default.Mail, contentDescription = "Email")
-                    },
-                    trailingIcon = {
-                        if (viewModel.state.email.isNotBlank()) {
-                            IconButton(onClick = {
-                                viewModel.state = viewModel.state.copy(email = "")
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Effacer"
-                                )
-                            }
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next
-                    ),
-                    onValueChange = { viewModel.onEvent(LoginEvent.OnEmailChanged(it)) })
-                OutlinedTextField(
-                    value = viewModel.state.password,
-                    label = { Text("Mot de passe") },
-                    singleLine = true,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Filled.Password,
-                            contentDescription = "Mot de passe"
-                        )
-                    },
-                    trailingIcon = {
-                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                            if (passwordVisible) {
-                                Icon(
-                                    imageVector = Icons.Filled.Visibility,
-                                    contentDescription = "Cacher le mot de passe"
-                                )
-                            } else {
-                                Icon(
-                                    imageVector = Icons.Filled.VisibilityOff,
-                                    contentDescription = "Afficher le mot de passe"
-                                )
-                            }
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    onValueChange = { viewModel.onEvent(LoginEvent.OnPasswordChanged(it)) })
-                Button(onClick = { viewModel.onEvent(LoginEvent.OnSubmit) }) {
-                    Text(text = "Se connecter")
-                }
-            }
-
-            Row {
-                Text(text = "Pas encore de compte ?")
+    Alterneo_appTheme {
+        Scaffold(scaffoldState = scaffoldState) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 Text(
-                    text = "Inscrivez-vous",
-                    Modifier.clickable { viewModel.onEvent(LoginEvent.OnSignupLinkClicked) })
+                    text = "Connexion à votre compte",
+                    fontSize = 26.sp,
+                    color = MaterialTheme.colors.secondary
+                )
+                Spacer(Modifier.height(36.dp))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    OutlinedTextField(
+                        value = viewModel.state.email,
+                        singleLine = true,
+                        label = {
+                            Text("Email")
+                        },
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Default.Mail, contentDescription = "Email")
+                        },
+                        trailingIcon = {
+                            if (viewModel.state.email.isNotBlank()) {
+                                IconButton(onClick = {
+                                    viewModel.state = viewModel.state.copy(email = "")
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Effacer"
+                                    )
+                                }
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
+                        ),
+                        onValueChange = { viewModel.onEvent(LoginEvent.OnEmailChanged(it)) })
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = viewModel.state.password,
+                        label = { Text("Mot de passe") },
+                        singleLine = true,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Password,
+                                contentDescription = "Mot de passe"
+                            )
+                        },
+                        trailingIcon = {
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                if (passwordVisible) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Visibility,
+                                        contentDescription = "Cacher le mot de passe"
+                                    )
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Filled.VisibilityOff,
+                                        contentDescription = "Afficher le mot de passe"
+                                    )
+                                }
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        onValueChange = { viewModel.onEvent(LoginEvent.OnPasswordChanged(it)) })
+                    Spacer(modifier = Modifier.height(22.dp))
+                    Button(
+                        onClick = { viewModel.onEvent(LoginEvent.OnSubmit) },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary),
+                        shape = RoundedCornerShape(100)
+                    ) {
+                        Text(text = "Se connecter")
+                    }
+                }
+                Spacer(modifier = Modifier.height(32.dp))
+                Row {
+                    Text(text = "Pas encore de compte ?")
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "Inscrivez-vous",
+                        Modifier.clickable { viewModel.onEvent(LoginEvent.OnSignupLinkClicked) },
+                        color = MaterialTheme.colors.secondary
+                    )
+                }
             }
         }
     }
