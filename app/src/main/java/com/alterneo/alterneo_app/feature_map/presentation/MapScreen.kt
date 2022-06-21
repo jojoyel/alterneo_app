@@ -125,7 +125,7 @@ fun MapScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                     Divider(modifier = Modifier.padding(bottom = 8.dp))
                     viewModel.state.selectedCompany?.let {
-                        CompanyCard(company = it)
+                        CompanyCard(company = it, viewModel = viewModel)
                     }
                 }
             },

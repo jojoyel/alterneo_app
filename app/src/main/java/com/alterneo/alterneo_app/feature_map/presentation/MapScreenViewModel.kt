@@ -80,13 +80,14 @@ class MapScreenViewModel @Inject constructor(
                                 is Resource.Success -> {
                                     val c =
                                         event.company.copy(companyRegistration = result.data?.toCompanyRegistration())
-                                    state = state.copy(selectedCompany = c)
+                                    state = state.copy(
+                                        selectedCompany = c
+                                    )
                                 }
                                 is Resource.Error -> {
                                     sendUiEvent(UiEvent.ShowSnackbar("Error"))
                                 }
                                 is Resource.Loading -> {
-
                                 }
                             }
                         }
@@ -96,13 +97,18 @@ class MapScreenViewModel @Inject constructor(
                                 is Resource.Success -> {
                                     val c =
                                         state.selectedCompany?.copy(proposals = result.data?.data?.map { it -> it.toProposal() })
-                                    state = state.copy(selectedCompany = c)
+                                    state = state.copy(
+                                        selectedCompany = c,
+                                        selectedCompanyProposalsLoading = false
+                                    )
                                 }
                                 is Resource.Loading -> {
-
+                                    state = state.copy(
+                                        selectedCompanyProposalsLoading = true
+                                    )
                                 }
                                 is Resource.Error -> {
-
+                                    state = state.copy(selectedCompanyProposalsLoading = false)
                                 }
                             }
                         }

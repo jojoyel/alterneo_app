@@ -16,10 +16,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.alterneo.alterneo_app.feature_map.domain.model.Company
+import com.alterneo.alterneo_app.feature_map.presentation.MapScreenViewModel
 import com.alterneo.alterneo_app.utils.BusinessSectorEnum
 
 @Composable
-fun CompanyCard(company: Company, modifier: Modifier = Modifier) {
+fun CompanyCard(company: Company, modifier: Modifier = Modifier, viewModel: MapScreenViewModel) {
     company.companyRegistration?.let {
         Column() {
             Row(modifier = modifier.fillMaxWidth()) {
@@ -76,6 +77,16 @@ fun CompanyCard(company: Company, modifier: Modifier = Modifier) {
                     items(it) { proposal ->
                         ProposalItem(proposal = proposal, company.companyRegistration.name)
                     }
+                }
+            }
+            if (viewModel.state.selectedCompanyProposalsLoading) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator(modifier = Modifier
+                        .width(48.dp)
+                        .height(48.dp))
                 }
             }
         }
