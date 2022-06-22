@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.layout.*
@@ -28,8 +27,12 @@ import com.alterneo.alterneo_app.feature_map.presentation.composables.DrawerCont
 import com.alterneo.alterneo_app.ui.theme.Alterneo_appTheme
 import com.alterneo.alterneo_app.utils.UiEvent
 import com.mapbox.geojson.Point
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
+import com.mapbox.maps.dsl.cameraOptions
+import com.mapbox.maps.plugin.animation.camera
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
@@ -142,31 +145,40 @@ fun MapScreen(
                             .offset(x = (-12).dp, y = 12.dp)
                     )
                 }
-                AndroidView(factory = {
-                    View.inflate(it, R.layout.map_layout, null)
-                },
-                    update = {
-                        val mapView = it.findViewById<MapView>(R.id.mapView)
-
-                        mapView?.let { mv ->
-                            mv.getMapboxMap().apply {
-                                loadStyleUri(
-                                    Style.MAPBOX_STREETS
-                                ) {
-                                    mv.scalebar.enabled = false
-                                }
-                                addOnMapClickListener(onMapClickListener = {
-                                    viewModel.onEvent(MapEvent.OnMapClicked)
-                                    false
-                                })
+                AndroidView(factory = { context ->
+                    val initialCameraOptions = CameraOptions.Builder()
+                        .center(viewModel.state.mapCameraPosition)
+                        .zoom(6.0)
+                        .build()
+                    val mapInitOptions =
+                        MapInitOptions(context = context, cameraOptions = initialCameraOptions)
+                    val mapView = MapView(context, mapInitOptions)
+                    mapView
+                }, update = { mapView ->
+                    mapView.let { mv ->
+                        mv.getMapboxMap().apply {
+                            loadStyleUri(
+                                Style.MAPBOX_STREETS
+                            ) {
+                                mv.scalebar.enabled = false
                             }
-                            viewModel.companies.forEach { company ->
-                                addAnnotationToMap(mv, company) { c ->
-                                    viewModel.onEvent(MapEvent.OnPinClicked(c))
-                                }
+                            addOnMapClickListener(onMapClickListener = {
+                                viewModel.onEvent(MapEvent.OnMapClicked)
+                                false
+                            })
+                        }
+                        mv.camera.flyTo(
+                            cameraOptions {
+                                center(viewModel.state.mapCameraPosition)
+                            }
+                        )
+                        viewModel.companies.forEach { company ->
+                            addAnnotationToMap(mv, company) { c ->
+                                viewModel.onEvent(MapEvent.OnPinClicked(c))
                             }
                         }
-                    })
+                    }
+                })
             }
         }
     }

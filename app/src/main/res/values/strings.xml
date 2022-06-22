@@ -37,4 +37,8 @@
 	<string name="contract_integ">Single integration contract</string>
 	<string name="contract_support">Job support contract</string>
 	<string name="contract_initiative">Employment initiative contract</string>
+	<string name="invalid_creds">x</string>
+	<string name="error_occurred">x</string>
+	<string name="error_joining_server">x</string>
+	<string name="error">x</string>
 </resources>

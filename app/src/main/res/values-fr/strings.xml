@@ -33,4 +33,8 @@
 	<string name="contract_integ">CUI</string>
 	<string name="contract_support">CAE</string>
 	<string name="contract_initiative">CIE</string>
+	<string name="invalid_creds">Identifiants incorrects</string>
+	<string name="error_occurred">Une erreur est survenue</string>
+	<string name="error_joining_server">Impossible de joindre le serveur</string>
+	<string name="error">Erreur</string>
 </resources>

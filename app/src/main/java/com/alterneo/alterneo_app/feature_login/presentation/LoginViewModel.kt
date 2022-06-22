@@ -1,11 +1,13 @@
 package com.alterneo.alterneo_app.feature_login.presentation
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alterneo.alterneo_app.R
 import com.alterneo.alterneo_app.feature_login.domain.use_case.DoLoginUseCase
 import com.alterneo.alterneo_app.feature_login.domain.use_case.ValidateEmailUseCase
 import com.alterneo.alterneo_app.feature_login.domain.use_case.ValidatePasswordUseCase
@@ -26,7 +28,8 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: DoLoginUseCase,
     private val sharedPreferences: SharedPreferences,
     private val validateEmailUseCase: ValidateEmailUseCase,
-    private val validatePasswordUseCase: ValidatePasswordUseCase
+    private val validatePasswordUseCase: ValidatePasswordUseCase,
+    private val context: Context
 ) : ViewModel() {
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -37,6 +40,9 @@ class LoginViewModel @Inject constructor(
         sharedPreferences.getString(Constants.SHARED_PREF_JWT, null)?.let {
             sendUiEvent(UiEvent.Navigate(Routes.MAP_ROUTE))
         }
+        sharedPreferences.getString(Constants.SHARED_PREF_EMAIL, null)?.let {
+            state = state.copy(email = it)
+        }
     }
 
     private fun doLogin() {
@@ -46,7 +52,7 @@ class LoginViewModel @Inject constructor(
                     sendUiEvent(UiEvent.Navigate(Routes.MAP_ROUTE))
                 }
                 is Resource.Error -> {
-                    sendUiEvent(UiEvent.ShowSnackbar("Identifiants incorrects"))
+                    sendUiEvent(UiEvent.ShowSnackbar(context.getString(R.string.invalid_creds)))
                 }
                 is Resource.Loading -> {
                 }
@@ -63,9 +69,17 @@ class LoginViewModel @Inject constructor(
                 state = state.copy(password = event.password)
             }
             is LoginEvent.OnSubmit -> {
-                if (ValidateEmailUseCase)
-                    doLogin()
+                if (!validateEmailUseCase(state.email)) {
+                    TODO("show error on interface")
+                    return
+                }
+                if (!validatePasswordUseCase(state.password)) {
+                    TODO("show error on interface")
+                    return
+                }
+                doLogin()
             }
+            else -> {}
         }
     }
 

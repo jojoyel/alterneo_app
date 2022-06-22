@@ -65,4 +65,10 @@ object AppModule {
     fun provideLoginRepository(api: AlterneoAPI): LoginRepository {
         return LoginRepositoryImpl(api)
     }
+
+    @Provides
+    @Singleton
+    fun provideContext(app: Application): Context {
+        return app.applicationContext
+    }
 }
