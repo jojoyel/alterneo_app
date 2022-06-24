@@ -31,14 +31,14 @@ data class CompanyRegistrationDto(
         description = description,
         employeesNumber = employeesNumber,
         id = id,
-        image = image,
+        image = image ?: "",
         juridicalStatusId = juridicalStatusId,
-        mail = mail,
+        mail = mail ?: "",
         name = name,
         postalCode = postalCode,
         siret = siret,
-        tel = tel,
-        url = url,
+        tel = tel ?: "",
+        url = url ?: "",
         verified = verified
     )
 }
