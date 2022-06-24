@@ -41,4 +41,17 @@
 	<string name="error_occurred">x</string>
 	<string name="error_joining_server">x</string>
 	<string name="error">x</string>
+	<string name="invalid_email">x</string>
+	<string name="invalid_password">x</string>
+	<string name="field_email">x</string>
+	<string name="field_password">x</string>
+	<string name="action_login">x</string>
+	<string name="action_logout">x</string>
+	<string name="action_signup">x</string>
+	<string name="contentdesc_show_password">x</string>
+	<string name="contentdesc_hide_password">x</string>
+	<string name="contentdesc_clear">x</string>
+	<string name="title_login">x</string>
+	<string name="signup_catchphrase">x</string>
+	<string name="error_fetching_companies">x</string>
 </resources>

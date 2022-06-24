@@ -1,6 +1,5 @@
 package com.alterneo.alterneo_app.feature_map.presentation
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -11,6 +10,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alterneo.alterneo_app.R
+import com.alterneo.alterneo_app.core.UiText
 import com.alterneo.alterneo_app.feature_map.domain.model.Company
 import com.alterneo.alterneo_app.feature_map.domain.use_case.GetCompaniesLocationsUseCase
 import com.alterneo.alterneo_app.feature_map.domain.use_case.GetCompanyProposalUseCase
@@ -30,8 +30,7 @@ class MapScreenViewModel @Inject constructor(
     private val getCompaniesLocationsUseCase: GetCompaniesLocationsUseCase,
     private val getCompanyRegistrationUseCase: GetCompanyRegistrationUseCase,
     private val getCompanyProposalsUseCase: GetCompanyProposalUseCase,
-    private val sharedPreferences: SharedPreferences,
-    private val context: Context
+    private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -71,7 +70,7 @@ class MapScreenViewModel @Inject constructor(
                         sharedPreferences.edit().putString(Constants.SHARED_PREF_JWT, null).apply()
                         sendUiEvent(UiEvent.Navigate(Routes.LOGIN_ROUTE))
                     } else {
-                        sendUiEvent(UiEvent.ShowSnackbar("Problème lors de la récupération des entreprises"))
+                        sendUiEvent(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_fetching_companies)))
                         sendUiEvent(UiEvent.LoadingChange(false))
                     }
                 }
@@ -99,7 +98,7 @@ class MapScreenViewModel @Inject constructor(
                                     sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Expanded))
                                 }
                                 is Resource.Error -> {
-                                    sendUiEvent(UiEvent.ShowSnackbar(context.getString(R.string.error)))
+                                    sendUiEvent(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error)))
                                 }
                                 is Resource.Loading -> {
                                 }

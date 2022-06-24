@@ -33,8 +33,29 @@
 	<string name="contract_integ">CUI</string>
 	<string name="contract_support">CAE</string>
 	<string name="contract_initiative">CIE</string>
+
 	<string name="invalid_creds">Identifiants incorrects</string>
+	<string name="invalid_email">Veuillez rentrer une addresse mail</string>
+	<string name="invalid_password">Veuillez rentrer un mot de passe</string>
+
+	<string name="error">Erreur</string>
 	<string name="error_occurred">Une erreur est survenue</string>
 	<string name="error_joining_server">Impossible de joindre le serveur</string>
-	<string name="error">Erreur</string>
+
+	<string name="field_email">Email</string>
+	<string name="field_password">Mot de passe</string>
+	<string name="action_login">Se connecter</string>
+	<string name="action_logout">Se déconnecter</string>
+	<string name="action_signup">S\'inscrire</string>
+
+	<string name="contentdesc_show_password">Afficher le mot de passe</string>
+	<string name="contentdesc_hide_password">Cacher le mot de passe</string>
+	<string name="contentdesc_clear">Effacer</string>
+
+	<string name="title_login">Connexion à votre compte</string>
+
+	<string name="signup_catchphrase">Pas encore de compte ?</string>
+
+	<string name="error_fetching_companies">Problème lors de la récupération des entreprises</string>
+
 </resources>

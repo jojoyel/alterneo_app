@@ -1,6 +1,5 @@
 package com.alterneo.alterneo_app.feature_login.presentation
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alterneo.alterneo_app.R
+import com.alterneo.alterneo_app.core.UiText
 import com.alterneo.alterneo_app.feature_login.domain.use_case.DoLoginUseCase
 import com.alterneo.alterneo_app.feature_login.domain.use_case.ValidateEmailUseCase
 import com.alterneo.alterneo_app.feature_login.domain.use_case.ValidatePasswordUseCase
@@ -28,8 +28,7 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: DoLoginUseCase,
     private val sharedPreferences: SharedPreferences,
     private val validateEmailUseCase: ValidateEmailUseCase,
-    private val validatePasswordUseCase: ValidatePasswordUseCase,
-    private val context: Context
+    private val validatePasswordUseCase: ValidatePasswordUseCase
 ) : ViewModel() {
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -49,12 +48,18 @@ class LoginViewModel @Inject constructor(
         loginUseCase(state.email, state.password).onEach { result ->
             when (result) {
                 is Resource.Success -> {
+                    state = state.copy(isLoading = false)
                     sendUiEvent(UiEvent.Navigate(Routes.MAP_ROUTE))
                 }
                 is Resource.Error -> {
-                    sendUiEvent(UiEvent.ShowSnackbar(context.getString(R.string.invalid_creds)))
+                    state = state.copy(
+                        isLoading = false,
+                        emailError = UiText.StringResource(R.string.invalid_creds),
+                        passwordError = UiText.StringResource(R.string.invalid_creds)
+                    )
                 }
                 is Resource.Loading -> {
+                    state = state.copy(isLoading = true)
                 }
             }
         }.launchIn(viewModelScope)
@@ -64,17 +69,27 @@ class LoginViewModel @Inject constructor(
         when (event) {
             is LoginEvent.OnEmailChanged -> {
                 state = state.copy(email = event.email)
+                if (state.emailError != null && validateEmailUseCase(state.email)) {
+                    state = state.copy(emailError = null)
+                    return
+                }
             }
             is LoginEvent.OnPasswordChanged -> {
                 state = state.copy(password = event.password)
+                if (state.passwordError != null && validatePasswordUseCase(state.email)) {
+                    state = state.copy(passwordError = null)
+                    return
+                }
             }
             is LoginEvent.OnSubmit -> {
+                if (state.isLoading) return
                 if (!validateEmailUseCase(state.email)) {
-                    TODO("show error on interface")
+                    state = state.copy(emailError = UiText.StringResource(R.string.invalid_email))
                     return
                 }
                 if (!validatePasswordUseCase(state.password)) {
-                    TODO("show error on interface")
+                    state =
+                        state.copy(passwordError = UiText.StringResource(R.string.invalid_password))
                     return
                 }
                 doLogin()

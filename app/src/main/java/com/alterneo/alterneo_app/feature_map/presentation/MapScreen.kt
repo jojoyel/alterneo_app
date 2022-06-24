@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
@@ -55,6 +56,8 @@ fun MapScreen(
 
     var isSomethingLoading by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
@@ -69,7 +72,11 @@ fun MapScreen(
                     }
                 }
                 is UiEvent.ShowSnackbar -> {
-                    bottomSheetScaffoldState.snackbarHostState.showSnackbar(event.message)
+                    bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+                        event.message.asString(
+                            context = context
+                        )
+                    )
                 }
                 is UiEvent.LoadingChange -> {
                     isSomethingLoading = event.loading
