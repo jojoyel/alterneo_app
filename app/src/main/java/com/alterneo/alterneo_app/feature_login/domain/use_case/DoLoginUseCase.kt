@@ -31,7 +31,7 @@ class DoLoginUseCase @Inject constructor(
         } catch (e: HttpException) {
             emit(
                 Resource.Error<LoginDto>(
-                    e.localizedMessage ?: context.getString(R.string.error_occurred)
+                    e.code().toString()
                 )
             )
         } catch (e: IOException) {

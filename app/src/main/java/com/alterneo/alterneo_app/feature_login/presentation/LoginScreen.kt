@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -32,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.alterneo.alterneo_app.R
 import com.alterneo.alterneo_app.ui.theme.Alterneo_appTheme
+import com.alterneo.alterneo_app.ui.theme.trainOneFont
 import com.alterneo.alterneo_app.utils.UiEvent
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -74,9 +76,16 @@ fun LoginScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = stringResource(id = R.string.title_login),
-                    fontSize = 26.sp,
+                    text = "Alterneo",
+                    fontSize = 32.sp,
+                    fontFamily = trainOneFont,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.secondary
+                )
+                Spacer(modifier = Modifier.height(18.dp))
+                Text(
+                    text = stringResource(id = R.string.title_login),
+                    fontSize = 26.sp
                 )
                 Spacer(Modifier.height(36.dp))
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -187,7 +196,7 @@ fun LoginScreen(
                             .animateContentSize()
                     ) {
                         if (viewModel.state.isLoading) {
-                            CircularProgressIndicator()
+                            CircularProgressIndicator(color = MaterialTheme.colors.onSecondary)
                         } else {
                             Text(
                                 text = stringResource(id = R.string.action_login),
