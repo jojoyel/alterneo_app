@@ -9,12 +9,15 @@ import com.alterneo.alterneo_app.feature_register.domain.use_case.UserSignupUseC
 import com.alterneo.alterneo_app.utils.Resource
 import com.alterneo.alterneo_app.utils.Routes
 import com.alterneo.alterneo_app.utils.UiEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class SignupViewModel @Inject constructor(
     private val userSignupUseCase: UserSignupUseCase
 ) : ViewModel() {
@@ -32,16 +35,18 @@ class SignupViewModel @Inject constructor(
         ).onEach { result ->
             when (result) {
                 is Resource.Success -> {
-
+                    sendUiEvent(UiEvent.Navigate(Routes.LOGIN_ROUTE))
+                    state = state.copy(isLoading = false)
                 }
                 is Resource.Error -> {
 
+                    state = state.copy(isLoading = false)
                 }
                 is Resource.Loading -> {
-
+                    state = state.copy(isLoading = true)
                 }
             }
-        }
+        }.launchIn(viewModelScope)
     }
 
     fun onEvent(event: SignupEvent) {

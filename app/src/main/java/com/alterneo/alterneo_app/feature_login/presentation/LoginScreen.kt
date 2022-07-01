@@ -61,7 +61,11 @@ fun LoginScreen(
                     )
                 }
                 is UiEvent.Navigate -> {
-                    navController.navigate(event.route)
+                    navController.navigate(event.route) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
                 }
                 else -> Unit
             }

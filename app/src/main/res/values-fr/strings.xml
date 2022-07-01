@@ -44,6 +44,7 @@
 
 	<string name="field_email">Email</string>
 	<string name="field_password">Mot de passe</string>
+	<string name="field_password_confirmation">Confirmation</string>
 	<string name="action_login">Se connecter</string>
 	<string name="action_logout">Se déconnecter</string>
 	<string name="action_signup">S\'inscrire</string>
@@ -56,9 +57,11 @@
 	<string name="title_signup">Création de votre compte</string>
 
 	<string name="signup_catchphrase">Pas encore de compte ?</string>
+	<string name="signin_catchphrase">Déjà un compte ?</string>
 
 	<string name="error_fetching_companies">Problème lors de la récupération des entreprises</string>
 	<string name="field_lastname">Nom</string>
 	<string name="field_firstname">Prénom</string>
+	<string name="contentdesc_email">Email address</string>
 
 </resources>

@@ -31,7 +31,7 @@ class MainActivity2 constructor() :
                     MapScreen(navController)
                 }
                 composable(Routes.USER_SIGNUP_ROUTE) {
-                    SignupScreen()
+                    SignupScreen(navController)
                 }
             }
         }

@@ -1,5 +1,7 @@
 package com.alterneo.alterneo_app.feature_map.domain.use_case
 
+import android.content.Context
+import com.alterneo.alterneo_app.R
 import com.alterneo.alterneo_app.feature_map.data.remote.dto.ArrayDto
 import com.alterneo.alterneo_app.feature_map.data.remote.dto.CompanyDto
 import com.alterneo.alterneo_app.feature_map.domain.repository.Repository
@@ -11,7 +13,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class GetCompaniesLocationsUseCase @Inject constructor(
-    private val repository: Repository
+    private val repository: Repository,
+    private val context: Context
 ) {
     operator fun invoke(page: Int = 0): Flow<Resource<ArrayDto<CompanyDto>>> = flow {
         try {
@@ -21,7 +24,7 @@ class GetCompaniesLocationsUseCase @Inject constructor(
         } catch (e: HttpException) {
             emit(Resource.Error<ArrayDto<CompanyDto>>(e.code().toString()))
         } catch (e: IOException) {
-            emit(Resource.Error<ArrayDto<CompanyDto>>("Couldn't reach server. Check your internet connection"))
+            emit(Resource.Error<ArrayDto<CompanyDto>>(context.getString(R.string.error)))
         }
     }
 }

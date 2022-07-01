@@ -9,6 +9,8 @@ import com.alterneo.alterneo_app.feature_login.data.remote.repository.LoginRepos
 import com.alterneo.alterneo_app.feature_login.domain.repository.LoginRepository
 import com.alterneo.alterneo_app.feature_map.data.remote.repository.RepositoryImpl
 import com.alterneo.alterneo_app.feature_map.domain.repository.Repository
+import com.alterneo.alterneo_app.feature_register.data.remote.repository.SignupRepositoryImpl
+import com.alterneo.alterneo_app.feature_register.domain.repository.SignupRepository
 import com.alterneo.alterneo_app.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -64,6 +66,12 @@ object AppModule {
     @Singleton
     fun provideLoginRepository(api: AlterneoAPI): LoginRepository {
         return LoginRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSignupRepository(api: AlterneoAPI): SignupRepository {
+        return SignupRepositoryImpl(api)
     }
 
     @Provides
