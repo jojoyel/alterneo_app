@@ -54,4 +54,5 @@
 	<string name="title_login">x</string>
 	<string name="signup_catchphrase">x</string>
 	<string name="error_fetching_companies">x</string>
+	<string name="title_signup">x</string>
 </resources>

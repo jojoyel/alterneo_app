@@ -111,7 +111,9 @@ class LoginViewModel @Inject constructor(
                 }
                 doLogin()
             }
-            else -> {}
+            is LoginEvent.OnSignupLinkClicked -> {
+                sendUiEvent(UiEvent.Navigate(Routes.USER_SIGNUP_ROUTE))
+            }
         }
     }
 

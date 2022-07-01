@@ -2,6 +2,7 @@ package com.alterneo.alterneo_app.core.data.remote
 
 import com.alterneo.alterneo_app.feature_login.data.remote.dto.LoginDto
 import com.alterneo.alterneo_app.feature_map.data.remote.dto.*
+import com.alterneo.alterneo_app.feature_register.domain.model.SignupModel
 import retrofit2.http.*
 
 interface AlterneoAPI {
@@ -32,4 +33,7 @@ interface AlterneoAPI {
 
     @GET("/v2/user/{id}")
     suspend fun getUser(@Path("id") userId: Int): UserDto
+
+    @POST("/v2/signup")
+    suspend fun signup(@Body body: SignupModel): String
 }

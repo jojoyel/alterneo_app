@@ -20,7 +20,6 @@ sealed class UiText {
                 stringResource(id = resId, formatArgs = *args)
             }
         }
-
     }
 
     fun asString(context: Context): String {

@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.alterneo.alterneo_app.feature_login.presentation.LoginScreen
 import com.alterneo.alterneo_app.feature_map.presentation.MapScreen
 import com.alterneo.alterneo_app.feature_map.presentation.ProposalsScreen
+import com.alterneo.alterneo_app.feature_register.presentation.user_signup.SignupScreen
 import com.alterneo.alterneo_app.utils.Routes
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,6 +29,9 @@ class MainActivity2 constructor() :
                 }
                 composable(Routes.MAP_ROUTE) {
                     MapScreen(navController)
+                }
+                composable(Routes.USER_SIGNUP_ROUTE) {
+                    SignupScreen()
                 }
             }
         }
