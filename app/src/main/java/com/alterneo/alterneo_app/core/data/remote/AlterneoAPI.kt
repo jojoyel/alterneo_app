@@ -35,5 +35,5 @@ interface AlterneoAPI {
     suspend fun getUser(@Path("id") userId: Int): UserDto
 
     @POST("/v2/signup")
-    suspend fun signup(@Body body: SignupModel): String
+    suspend fun signup(@Body body: SignupModel)
 }

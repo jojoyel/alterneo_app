@@ -19,16 +19,16 @@ class UserSignupUseCase @Inject constructor(
         password: String,
         lastName: String,
         firstName: String
-    ): Flow<Resource<String>> = flow {
+    ): Flow<Resource<Unit>> = flow {
         try {
-            emit(Resource.Loading<String>())
+            emit(Resource.Loading<Unit>())
             val result =
                 signupRepository.userSignup(email, password, lastName, firstName, accountType = 1)
-            emit(Resource.Success<String>(result))
+            emit(Resource.Success<Unit>(result))
         } catch (e: HttpException) {
-            emit(Resource.Error<String>(context.getString(R.string.error_occurred)))
+            emit(Resource.Error<Unit>(context.getString(R.string.error_occurred)))
         } catch (e: IOException) {
-            emit(Resource.Error<String>(context.getString(R.string.error_joining_server)))
+            emit(Resource.Error<Unit>(context.getString(R.string.error_joining_server)))
         }
     }
 }

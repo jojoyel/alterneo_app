@@ -8,7 +8,7 @@ interface SignupRepository {
         lastName: String,
         firstName: String,
         accountType: Int = 1
-    ): String
+    )
 
-    suspend fun companySignup(email: String, password: String, accountType: Int = 2): String
+    suspend fun companySignup(email: String, password: String, accountType: Int = 2)
 }
