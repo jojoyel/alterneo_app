@@ -8,29 +8,25 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alterneo.alterneo_app.feature_login.presentation.LoginScreen
 import com.alterneo.alterneo_app.feature_map.presentation.MapScreen
-import com.alterneo.alterneo_app.feature_map.presentation.ProposalsScreen
 import com.alterneo.alterneo_app.feature_register.presentation.user_signup.SignupScreen
-import com.alterneo.alterneo_app.utils.Routes
+import com.alterneo.alterneo_app.utils.Route
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity2 constructor() :
+class MainActivity2 :
     ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = Routes.LOGIN_ROUTE) {
-                composable(Routes.PROPOSALS_ROUTE) {
-                    ProposalsScreen()
-                }
-                composable(Routes.LOGIN_ROUTE) {
+            NavHost(navController = navController, startDestination = Route.LoginRoute.route) {
+                composable(Route.LoginRoute.route) {
                     LoginScreen(navController)
                 }
-                composable(Routes.MAP_ROUTE) {
+                composable(Route.MapRoute.route) {
                     MapScreen(navController)
                 }
-                composable(Routes.USER_SIGNUP_ROUTE) {
+                composable(Route.UserSignupRoute.route) {
                     SignupScreen(navController)
                 }
             }

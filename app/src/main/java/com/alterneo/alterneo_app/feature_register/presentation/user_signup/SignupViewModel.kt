@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alterneo.alterneo_app.feature_register.domain.use_case.UserSignupUseCase
 import com.alterneo.alterneo_app.utils.Resource
-import com.alterneo.alterneo_app.utils.Routes
+import com.alterneo.alterneo_app.utils.Route
 import com.alterneo.alterneo_app.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -26,7 +26,7 @@ class SignupViewModel @Inject constructor(
 
     var state by mutableStateOf(SignUpState())
 
-    fun doSignup() {
+    private fun doSignup() {
         userSignupUseCase(
             state.email,
             state.password,
@@ -35,11 +35,10 @@ class SignupViewModel @Inject constructor(
         ).onEach { result ->
             when (result) {
                 is Resource.Success -> {
-                    sendUiEvent(UiEvent.Navigate(Routes.LOGIN_ROUTE))
                     state = state.copy(isLoading = false)
+                    sendUiEvent(UiEvent.Navigate(Route.LoginRoute.route))
                 }
                 is Resource.Error -> {
-
                     state = state.copy(isLoading = false)
                 }
                 is Resource.Loading -> {
@@ -71,7 +70,7 @@ class SignupViewModel @Inject constructor(
                 doSignup()
             }
             is SignupEvent.OnSigninLinkClicked -> {
-                sendUiEvent(UiEvent.Navigate(Routes.LOGIN_ROUTE))
+                sendUiEvent(UiEvent.Navigate(Route.LoginRoute.route))
             }
         }
     }

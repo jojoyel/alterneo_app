@@ -64,4 +64,7 @@
 	<string name="field_firstname">Prénom</string>
 	<string name="contentdesc_email">Email address</string>
 
+	<string name="message_account_created">Compte créé avec succès</string>
+	<string name="message_expired_session">Session expirée</string>
+
 </resources>

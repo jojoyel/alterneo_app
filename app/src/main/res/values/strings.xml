@@ -60,4 +60,6 @@
 	<string name="field_lastname">x</string>
 	<string name="field_firstname">x</string>
 	<string name="contentdesc_email">x</string>
+	<string name="message_account_created">x</string>
+	<string name="message_expired_session">x</string>
 </resources>
