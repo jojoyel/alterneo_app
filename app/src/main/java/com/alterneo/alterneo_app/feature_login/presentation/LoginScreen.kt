@@ -1,10 +1,7 @@
 package com.alterneo.alterneo_app.feature_login.presentation
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -106,7 +103,11 @@ fun LoginScreen(
                             )
                         },
                         trailingIcon = {
-                            if (viewModel.state.email.isNotBlank()) {
+                            AnimatedVisibility(
+                                visible = viewModel.state.email.isNotBlank(),
+                                enter = slideInHorizontally(initialOffsetX = { it / 2 }) + fadeIn(),
+                                exit = slideOutHorizontally() + fadeOut()
+                            ) {
                                 IconButton(onClick = {
                                     viewModel.onEvent(LoginEvent.OnEmailChanged(""))
                                 }) {

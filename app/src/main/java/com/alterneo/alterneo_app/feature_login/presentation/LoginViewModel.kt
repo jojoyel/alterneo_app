@@ -52,26 +52,23 @@ class LoginViewModel @Inject constructor(
                     sendUiEvent(UiEvent.Navigate(Route.MapRoute.route))
                 }
                 is Resource.Error -> {
+                                state = state.copy(isLoading = false)
                     result.message?.toIntOrNull()?.let {
                         when (it) {
                             in 500..599 -> {
-                                state = state.copy(isLoading = false)
                                 sendUiEvent(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_joining_server)))
                             }
                             400 -> {
                                 state = state.copy(
-                                    isLoading = false,
                                     emailError = UiText.StringResource(R.string.invalid_creds),
                                     passwordError = UiText.StringResource(R.string.invalid_creds)
                                 )
                             }
                             else -> {
-                                state = state.copy(isLoading = false)
                                 sendUiEvent(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_occurred)))
                             }
                         }
                     } ?: run {
-                        state = state.copy(isLoading = false)
                         sendUiEvent(UiEvent.ShowSnackbar(UiText.DynamicString(result.message!!)))
                     }
                 }

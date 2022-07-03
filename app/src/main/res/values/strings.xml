@@ -62,4 +62,9 @@
 	<string name="contentdesc_email">x</string>
 	<string name="message_account_created">x</string>
 	<string name="message_expired_session">x</string>
+
+	<string name="invalid_last_name">x</string>
+	<string name="invalid_first_name">x</string>
+	<string name="invalid_confirmation_password">x</string>
+	<string name="error_duplicate_email">x</string>
 </resources>

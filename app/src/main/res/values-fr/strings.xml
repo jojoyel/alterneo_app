@@ -35,12 +35,16 @@
 	<string name="contract_initiative">CIE</string>
 
 	<string name="invalid_creds">Identifiants incorrects</string>
-	<string name="invalid_email">Veuillez rentrer une addresse mail</string>
-	<string name="invalid_password">Veuillez rentrer un mot de passe</string>
+	<string name="invalid_email">Veuillez rentrer une adresse mail</string>
+	<string name="invalid_password">Veuillez rentrer un mot de passe valide</string>
+	<string name="invalid_last_name">Nom invalide</string>
+	<string name="invalid_first_name">Prénom invalide</string>
+	<string name="invalid_confirmation_password">Mot de passe différent</string>
 
 	<string name="error">Erreur</string>
 	<string name="error_occurred">Une erreur est survenue</string>
 	<string name="error_joining_server">Impossible de joindre le serveur</string>
+	<string name="error_duplicate_email">Email déjà utilisé</string>
 
 	<string name="field_email">Email</string>
 	<string name="field_password">Mot de passe</string>

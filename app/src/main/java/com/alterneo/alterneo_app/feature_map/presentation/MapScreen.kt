@@ -49,8 +49,9 @@ fun MapScreen(
     navController: NavController,
     viewModel: MapScreenViewModel = hiltViewModel()
 ) {
+    val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberBottomSheetState(BottomSheetValue.Collapsed)
+        bottomSheetState = bottomSheetState
     )
 
     val coroutineScope = rememberCoroutineScope()
@@ -62,9 +63,9 @@ fun MapScreen(
             when (event) {
                 is UiEvent.MoveSheet -> {
                     if (event.expanded) {
-                        bottomSheetScaffoldState.bottomSheetState.expand()
+                        bottomSheetState.expand()
                     } else {
-                        bottomSheetScaffoldState.bottomSheetState.collapse()
+                        bottomSheetState.collapse()
                     }
                 }
                 is UiEvent.ShowSnackbar -> {

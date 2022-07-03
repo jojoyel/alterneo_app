@@ -115,7 +115,7 @@ fun SignupScreen(
                         exit = slideOutVertically()
                     ) {
                         Text(
-                            text = if (viewModel.state.firstNameError != null) viewModel.state.lastNameError!!.asString(
+                            text = if (viewModel.state.lastNameError != null) viewModel.state.lastNameError!!.asString(
                                 context
                             ) else "",
                             color = MaterialTheme.colors.error
