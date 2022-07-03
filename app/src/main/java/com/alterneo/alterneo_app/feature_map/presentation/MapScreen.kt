@@ -62,13 +62,10 @@ fun MapScreen(
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.MoveSheet -> {
-                    when (event.bottomSheetValue) {
-                        BottomSheetValue.Expanded -> {
-                            bottomSheetScaffoldState.bottomSheetState.expand()
-                        }
-                        BottomSheetValue.Collapsed -> {
-                            bottomSheetScaffoldState.bottomSheetState.collapse()
-                        }
+                    if (event.expanded) {
+                        bottomSheetScaffoldState.bottomSheetState.expand()
+                    } else {
+                        bottomSheetScaffoldState.bottomSheetState.collapse()
                     }
                 }
                 is UiEvent.ShowSnackbar -> {
@@ -79,7 +76,7 @@ fun MapScreen(
                     )
                 }
                 is UiEvent.LoadingChange -> {
-                    isSomethingLoading = event.loading
+                    isSomethingLoading = event.isLoading
                 }
                 is UiEvent.Navigate -> {
                     navController.navigate(event.route)

@@ -1,7 +1,6 @@
 package com.alterneo.alterneo_app.feature_map.presentation
 
 import android.content.SharedPreferences
-import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -68,7 +67,7 @@ class MapScreenViewModel @Inject constructor(
                 is Resource.Error -> {
                     if (result.message == "403") {
                         sharedPreferences.edit().putString(Constants.SHARED_PREF_JWT, null).apply()
-                        sendUiEvent(UiEvent.Navigate(Routes.LOGIN_ROUTE))
+                        sendUiEvent(UiEvent.Navigate(Route.LoginRoute.route))
                     } else {
                         sendUiEvent(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_fetching_companies)))
                         sendUiEvent(UiEvent.LoadingChange(false))
@@ -95,7 +94,6 @@ class MapScreenViewModel @Inject constructor(
                                     state = state.copy(
                                         selectedCompany = c
                                     )
-                                    sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Expanded))
                                 }
                                 is Resource.Error -> {
                                     sendUiEvent(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error)))
@@ -114,7 +112,7 @@ class MapScreenViewModel @Inject constructor(
                                         selectedCompany = c,
                                         selectedCompanyProposalsLoading = false
                                     )
-                                    sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Expanded))
+                                    sendUiEvent(UiEvent.MoveSheet(true))
                                 }
                                 is Resource.Loading -> {
                                     state = state.copy(
@@ -139,10 +137,6 @@ class MapScreenViewModel @Inject constructor(
 
                 }
             }
-            is MapEvent.OnMapClicked -> {
-//                sendUiEvent(UiEvent.MoveSheet(BottomSheetValue.Collapsed))
-//                state = state.copy(selectedCompany = null)
-            }
             is MapEvent.OnDrawerEvent -> {
                 processDrawerEvent(event.drawerEvent)
             }
@@ -155,6 +149,7 @@ class MapScreenViewModel @Inject constructor(
                     ToolClass.join(event.lat, event.long, event.zoom.toFloat())
                 ).apply()
             }
+            else -> {}
         }
     }
 
@@ -165,7 +160,7 @@ class MapScreenViewModel @Inject constructor(
                     remove(Constants.SHARED_PREF_JWT)
                     remove(Constants.SHARED_PREF_REFRESH_JWT)
                 }
-                sendUiEvent(UiEvent.Navigate(Routes.LOGIN_ROUTE))
+                sendUiEvent(UiEvent.Navigate(Route.LoginRoute.route))
             }
             is DrawerEvent.CloseClicked -> {
                 sendUiEvent(UiEvent.MoveDrawer(false))
