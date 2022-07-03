@@ -7,6 +7,5 @@ sealed class UiEvent {
     data class Navigate(val route: String) : UiEvent()
     data class ShowSnackbar(val message: UiText, val action: String? = null) : UiEvent()
     data class MoveSheet(val expanded: Boolean) : UiEvent()
-    data class LoadingChange(val isLoading: Boolean) : UiEvent()
     data class MoveDrawer(val open: Boolean) : UiEvent()
 }

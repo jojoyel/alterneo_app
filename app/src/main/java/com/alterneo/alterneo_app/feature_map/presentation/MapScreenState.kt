@@ -6,6 +6,7 @@ import com.mapbox.geojson.Point
 data class MapScreenState(
     var companies: MutableList<Company> = arrayListOf(),
     var selectedCompany: Company? = null,
+    var dataLoading: Boolean = false,
     var selectedCompanyProposalsLoading: Boolean = false,
     var mapCameraPosition: Point = Point.fromLngLat(4.035, 49.263)
 )

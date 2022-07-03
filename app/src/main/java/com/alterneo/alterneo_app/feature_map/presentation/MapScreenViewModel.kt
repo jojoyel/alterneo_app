@@ -1,7 +1,6 @@
 package com.alterneo.alterneo_app.feature_map.presentation
 
 import android.content.SharedPreferences
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,7 +14,7 @@ import com.alterneo.alterneo_app.feature_map.domain.use_case.GetCompaniesLocatio
 import com.alterneo.alterneo_app.feature_map.domain.use_case.GetCompanyProposalUseCase
 import com.alterneo.alterneo_app.feature_map.domain.use_case.GetCompanyRegistrationUseCase
 import com.alterneo.alterneo_app.utils.*
-import com.mapbox.geojson.Point
+import com.mapbox.geojson.Point.fromLngLat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
@@ -34,6 +33,9 @@ class MapScreenViewModel @Inject constructor(
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
+    private val _mapUiEvent = Channel<MapUiEvent>()
+    val mapUiEvent = _mapUiEvent.receiveAsFlow()
+
     var state by mutableStateOf(MapScreenState())
 
     var companies by mutableStateOf(ArrayList<Company>())
@@ -44,7 +46,7 @@ class MapScreenViewModel @Inject constructor(
             try {
                 val values = it.split("/")
                 state = state.copy(
-                    mapCameraPosition = Point.fromLngLat(
+                    mapCameraPosition = fromLngLat(
                         values[0].toDouble(),
                         values[1].toDouble()
                     )
@@ -59,10 +61,11 @@ class MapScreenViewModel @Inject constructor(
         getCompaniesLocationsUseCase(page).onEach { result ->
             when (result) {
                 is Resource.Success -> {
-                    sendUiEvent(UiEvent.LoadingChange(false))
+                    sendMapUiEvent(MapUiEvent.CompaniesAdded((result.data?.data?.map { companyDto -> companyDto.toCompany() } as ArrayList<Company>?)!!))
                     companies =
                         (result.data?.data?.map { companyDto -> companyDto.toCompany() } as ArrayList<Company>?)!!
                     if (result.data?.totalReturned == 50) loadCompanies(page + 1)
+                    else state = state.copy(dataLoading = false)
                 }
                 is Resource.Error -> {
                     if (result.message == "403") {
@@ -70,17 +73,20 @@ class MapScreenViewModel @Inject constructor(
                         sendUiEvent(UiEvent.Navigate(Route.LoginRoute.route))
                     } else {
                         sendUiEvent(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_fetching_companies)))
-                        sendUiEvent(UiEvent.LoadingChange(false))
+                        state = state.copy(
+                            dataLoading = false
+                        )
                     }
                 }
                 is Resource.Loading -> {
-                    sendUiEvent(UiEvent.LoadingChange(true))
+                    state = state.copy(
+                        dataLoading = true
+                    )
                 }
             }
         }.launchIn(viewModelScope)
     }
 
-    @OptIn(ExperimentalMaterialApi::class)
     fun onEvent(event: MapEvent) {
         when (event) {
             is MapEvent.OnPinClicked -> {
@@ -108,10 +114,21 @@ class MapScreenViewModel @Inject constructor(
                                 is Resource.Success -> {
                                     val c =
                                         state.selectedCompany?.copy(proposals = result.data?.data?.map { it -> it.toProposal() })
-                                    state = state.copy(
-                                        selectedCompany = c,
-                                        selectedCompanyProposalsLoading = false
-                                    )
+                                    try {
+                                        state = state.copy(
+                                            selectedCompany = c,
+                                            selectedCompanyProposalsLoading = false,
+                                            mapCameraPosition = fromLngLat(
+                                                c?.longitude!!.toDouble(),
+                                                c.latitude.toDouble()
+                                            )
+                                        )
+                                    } finally {
+                                        state = state.copy(
+                                            selectedCompany = c,
+                                            selectedCompanyProposalsLoading = false
+                                        )
+                                    }
                                     sendUiEvent(UiEvent.MoveSheet(true))
                                 }
                                 is Resource.Loading -> {
@@ -171,6 +188,12 @@ class MapScreenViewModel @Inject constructor(
     private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.send(event)
+        }
+    }
+
+    private fun sendMapUiEvent(event: MapUiEvent) {
+        viewModelScope.launch {
+            _mapUiEvent.send(event)
         }
     }
 }

@@ -12,7 +12,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -38,7 +40,6 @@ import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
-import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.scalebar.scalebar
 import kotlinx.coroutines.launch
 
@@ -49,14 +50,12 @@ fun MapScreen(
     viewModel: MapScreenViewModel = hiltViewModel()
 ) {
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+        bottomSheetState = rememberBottomSheetState(BottomSheetValue.Collapsed)
     )
 
     val coroutineScope = rememberCoroutineScope()
-
-    var isSomethingLoading by remember { mutableStateOf(false) }
-
     val context = LocalContext.current
+    var mapView: MapView? = null
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
@@ -75,9 +74,6 @@ fun MapScreen(
                         )
                     )
                 }
-                is UiEvent.LoadingChange -> {
-                    isSomethingLoading = event.isLoading
-                }
                 is UiEvent.Navigate -> {
                     navController.navigate(event.route)
                 }
@@ -87,6 +83,21 @@ fun MapScreen(
                             bottomSheetScaffoldState.drawerState.open()
                         } else {
                             bottomSheetScaffoldState.drawerState.close()
+                        }
+                    }
+                }
+                else -> {}
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.mapUiEvent.collect { event ->
+            when (event) {
+                is MapUiEvent.CompaniesAdded -> {
+                    event.companies.forEach {
+                        addAnnotationToMap(mapView, it) { c ->
+                            viewModel.onEvent(MapEvent.OnPinClicked(c))
                         }
                     }
                 }
@@ -140,7 +151,7 @@ fun MapScreen(
             sheetPeekHeight = 40.dp
         ) { _ ->
             Box(modifier = Modifier.fillMaxSize()) {
-                if (isSomethingLoading) {
+                if (viewModel.state.dataLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .zIndex(10f)
@@ -156,31 +167,23 @@ fun MapScreen(
                         .build()
                     val mapInitOptions =
                         MapInitOptions(context = context, cameraOptions = initialCameraOptions)
-                    val mapView = MapView(context, mapInitOptions)
-                    mapView
+                    val mv = MapView(context, mapInitOptions)
+                    mv.getMapboxMap().apply {
+                        loadStyleUri(
+                            Style.MAPBOX_STREETS
+                        ) {
+                            mv.scalebar.enabled = false
+                        }
+                    }
+                    mapView = mv
+                    mv
                 }, update = { mapView ->
                     mapView.let { mv ->
-                        mv.getMapboxMap().apply {
-                            loadStyleUri(
-                                Style.MAPBOX_STREETS
-                            ) {
-                                mv.scalebar.enabled = false
-                            }
-                            addOnMapClickListener(onMapClickListener = {
-                                viewModel.onEvent(MapEvent.OnMapClicked)
-                                false
-                            })
-                        }
                         mv.camera.flyTo(
                             cameraOptions {
                                 center(viewModel.state.mapCameraPosition)
                             }
                         )
-                        viewModel.companies.forEach { company ->
-                            addAnnotationToMap(mv, company) { c ->
-                                viewModel.onEvent(MapEvent.OnPinClicked(c))
-                            }
-                        }
                     }
                 })
             }

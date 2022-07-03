@@ -13,7 +13,7 @@ import com.alterneo.alterneo_app.feature_login.domain.use_case.ValidateEmailUseC
 import com.alterneo.alterneo_app.feature_login.domain.use_case.ValidatePasswordUseCase
 import com.alterneo.alterneo_app.utils.Constants
 import com.alterneo.alterneo_app.utils.Resource
-import com.alterneo.alterneo_app.utils.Routes
+import com.alterneo.alterneo_app.utils.Route
 import com.alterneo.alterneo_app.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -37,7 +37,7 @@ class LoginViewModel @Inject constructor(
 
     init {
         sharedPreferences.getString(Constants.SHARED_PREF_JWT, null)?.let {
-            sendUiEvent(UiEvent.Navigate(Routes.MAP_ROUTE))
+            sendUiEvent(UiEvent.Navigate(Route.MapRoute.route))
         }
         sharedPreferences.getString(Constants.SHARED_PREF_EMAIL, null)?.let {
             state = state.copy(email = it)
@@ -49,7 +49,7 @@ class LoginViewModel @Inject constructor(
             when (result) {
                 is Resource.Success -> {
                     state = state.copy(isLoading = false)
-                    sendUiEvent(UiEvent.Navigate(Routes.MAP_ROUTE))
+                    sendUiEvent(UiEvent.Navigate(Route.MapRoute.route))
                 }
                 is Resource.Error -> {
                     result.message?.toIntOrNull()?.let {
@@ -112,7 +112,7 @@ class LoginViewModel @Inject constructor(
                 doLogin()
             }
             is LoginEvent.OnSignupLinkClicked -> {
-                sendUiEvent(UiEvent.Navigate(Routes.USER_SIGNUP_ROUTE))
+                sendUiEvent(UiEvent.Navigate(Route.UserSignupRoute.route))
             }
         }
     }
