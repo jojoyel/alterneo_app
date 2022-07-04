@@ -8,4 +8,5 @@ sealed class SignupEvent {
     data class OnPasswordConfirmationChanged(val value: String) : SignupEvent()
     object OnSubmit : SignupEvent()
     object OnSigninLinkClicked : SignupEvent()
+    object OnCompanySigninLinkClicked : SignupEvent()
 }

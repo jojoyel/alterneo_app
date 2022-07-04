@@ -10,5 +10,18 @@ interface SignupRepository {
         accountType: Int = 1
     )
 
-    suspend fun companySignup(email: String, password: String, accountType: Int = 2)
+    suspend fun companySignup(
+        email: String,
+        password: String,
+        accountType: Int = 2,
+        name: String,
+        url: String,
+        tel: String,
+        postalCode: String,
+        siret: String,
+        addres: String,
+        city: String,
+        businessSectorId: Int,
+        juridicalStatusId: Int
+    )
 }

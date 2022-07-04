@@ -140,6 +140,9 @@ class SignupViewModel @Inject constructor(
             is SignupEvent.OnSigninLinkClicked -> {
                 sendUiEvent(UiEvent.Navigate(Route.LoginRoute.route))
             }
+            is SignupEvent.OnCompanySigninLinkClicked -> {
+                sendUiEvent(UiEvent.Navigate(Route.CompanySignupRoute.route))
+            }
         }
     }
 

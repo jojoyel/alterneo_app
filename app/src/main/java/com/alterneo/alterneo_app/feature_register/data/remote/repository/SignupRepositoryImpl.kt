@@ -1,6 +1,7 @@
 package com.alterneo.alterneo_app.feature_register.data.remote.repository
 
 import com.alterneo.alterneo_app.core.data.remote.AlterneoAPI
+import com.alterneo.alterneo_app.feature_register.domain.model.CompanySignupModel
 import com.alterneo.alterneo_app.feature_register.domain.model.SignupModel
 import com.alterneo.alterneo_app.feature_register.domain.repository.SignupRepository
 import javax.inject.Inject
@@ -23,12 +24,34 @@ class SignupRepositoryImpl @Inject constructor(private val api: AlterneoAPI) : S
             )
         )
 
-    override suspend fun companySignup(email: String, password: String, accountType: Int) =
+    override suspend fun companySignup(
+        email: String,
+        password: String,
+        accountType: Int,
+        name: String,
+        url: String,
+        tel: String,
+        postalCode: String,
+        siret: String,
+        address: String,
+        city: String,
+        businessSectorId: Int,
+        juridicalStatusId: Int
+    ) =
         api.signup(
-            SignupModel(
+            CompanySignupModel(
                 email = email,
                 password = password,
-                accountType = accountType
+                accountType = accountType,
+                name = name,
+                url = url,
+                tel = tel,
+                postalCode = postalCode,
+                siret = siret,
+                address = address,
+                city = city,
+                businessSectorId = businessSectorId,
+                juridicalStatusId = juridicalStatusId
             )
         )
 }

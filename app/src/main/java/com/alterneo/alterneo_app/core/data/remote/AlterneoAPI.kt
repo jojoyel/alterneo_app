@@ -2,6 +2,7 @@ package com.alterneo.alterneo_app.core.data.remote
 
 import com.alterneo.alterneo_app.feature_login.data.remote.dto.LoginDto
 import com.alterneo.alterneo_app.feature_map.data.remote.dto.*
+import com.alterneo.alterneo_app.feature_register.domain.model.CompanySignupModel
 import com.alterneo.alterneo_app.feature_register.domain.model.SignupModel
 import retrofit2.http.*
 
@@ -36,4 +37,7 @@ interface AlterneoAPI {
 
     @POST("/v2/signup")
     suspend fun signup(@Body body: SignupModel)
+
+    @POST("/v2/signup")
+    suspend fun signup(@Body body: CompanySignupModel)
 }

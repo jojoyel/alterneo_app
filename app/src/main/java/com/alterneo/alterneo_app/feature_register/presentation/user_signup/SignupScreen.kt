@@ -372,6 +372,16 @@ fun SignupScreen(
                         color = MaterialTheme.colors.secondary
                     )
                 }
+                Spacer(modifier = Modifier.height(8.dp))
+                Row {
+                    Text(text = stringResource(id = R.string.company_signup_catchphrase))
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(id = R.string.action_signup),
+                        Modifier.clickable { viewModel.onEvent(SignupEvent.OnCompanySigninLinkClicked) },
+                        color = MaterialTheme.colors.secondary
+                    )
+                }
             }
         }
     }
