@@ -37,48 +37,54 @@
 	<string name="contract_integ">Single integration contract</string>
 	<string name="contract_support">Job support contract</string>
 	<string name="contract_initiative">Employment initiative contract</string>
-	<string name="invalid_creds">x</string>
-	<string name="error_occurred">x</string>
-	<string name="error_joining_server">x</string>
-	<string name="error">x</string>
-	<string name="invalid_email">x</string>
-	<string name="invalid_password">x</string>
-	<string name="field_email">x</string>
-	<string name="field_password">x</string>
-	<string name="field_password_confirmation">x</string>
-	<string name="action_login">x</string>
-	<string name="action_logout">x</string>
-	<string name="action_signup">x</string>
-	<string name="contentdesc_show_password">x</string>
-	<string name="contentdesc_hide_password">x</string>
-	<string name="contentdesc_clear">x</string>
-	<string name="title_login">x</string>
-	<string name="signup_catchphrase">x</string>
-	<string name="signin_catchphrase">x</string>
-	<string name="error_fetching_companies">x</string>
-	<string name="title_signup">x</string>
-	<string name="field_lastname">x</string>
-	<string name="field_firstname">x</string>
-	<string name="contentdesc_email">x</string>
-	<string name="message_account_created">x</string>
-	<string name="message_expired_session">x</string>
+	<string name="invalid_creds">Incorrect login details</string>
+	<string name="invalid_email">Please enter an email address</string>
+	<string name="invalid_password">Please enter a valid password</string>
+	<string name="invalid_last_name">Invalid name</string>
+	<string name="invalid_first_name">Invalid first name</string>
+	<string name="invalid_confirmation_password">Different password</string>
 
-	<string name="invalid_last_name">x</string>
-	<string name="invalid_first_name">x</string>
-	<string name="invalid_confirmation_password">x</string>
-	<string name="error_duplicate_email">x</string>
-	<string name="title_company_signup">x</string>
-	<string name="company_signup_catchphrase">x</string>
-	<string name="field_company_name">x</string>
-	<string name="action_continue">x</string>
-	<string name="field_tel">x</string>
-	<string name="field_url">x</string>
-	<string name="invalid_tel">x</string>
-	<string name="invalid_url">x</string>
-	<string name="field_address">x</string>
-	<string name="field_city">x</string>
-	<string name="field_postal_code">x</string>
-	<string name="invalid_address">x</string>
-	<string name="invalid_city">x</string>
-	<string name="invalid_postal_code">x</string>
+	<string name="error">Error</string>
+	<string name="error_occurred">An error has occurred</string>
+	<string name="error_joining_server">Unable to reach the server</string>
+	<string name="error_duplicate_email">Email already used</string>
+	<string name="error_fetching_companies">Problem with the recovery of the companies</string>
+
+	<string name="field_email">Email</string>
+	<string name="field_password">Password</string>
+	<string name="field_password_confirmation">Confirmation</string>
+	<string name="field_lastname">Name</string>
+	<string name="field_firstname">First name</string>
+	<string name="field_company_name">Company name</string>
+
+	<string name="action_login">Login</string>
+	<string name="action_logout">Logout</string>
+	<string name="action_signup">Signup</string>
+	<string name="action_continue">Continue</string>
+
+	<string name="contentdesc_show_password">Show password</string>
+	<string name="contentdesc_hide_password">Hide password</string>
+	<string name="contentdesc_clear">Clear</string>
+	<string name="contentdesc_email">Email address</string>
+
+	<string name="title_login">Login to your account</string>
+	<string name="title_signup">Create your account</string>
+	<string name="title_company_signup">Create your company account</string>
+
+	<string name="signup_catchphrase">No account yet ?</string>
+	<string name="company_signup_catchphrase">Are you a company ?</string>
+	<string name="signin_catchphrase">Already have an account?</string>
+
+	<string name="message_account_created">Account successfully created</string>
+	<string name="message_expired_session">Session expired</string>
+	<string name="field_tel">Phone</string>
+	<string name="field_url">URL Link</string>
+	<string name="invalid_tel">Invalid phone</string>
+	<string name="invalid_url">Invalid URL</string>
+	<string name="field_address">Address</string>
+	<string name="field_city">City</string>
+	<string name="field_postal_code">Postal code</string>
+	<string name="invalid_address">Invalide address</string>
+	<string name="invalid_city">Invalid City</string>
+	<string name="invalid_postal_code">Invalid postal code</string>
 </resources>
